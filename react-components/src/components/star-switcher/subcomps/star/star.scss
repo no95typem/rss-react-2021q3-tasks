@@ -1,0 +1,18 @@
+.root {
+  background-size: contain;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  max-height: 100%;
+  max-width: 10%;
+  aspect-ratio: 1;
+  display: block;
+  &_active {
+    background-image: url('./star.png');
+  }
+  &_not-active {
+    background-image: url('./star-not-active.png');
+  }
+  &_input {
+    display: none;
+  }
+}
