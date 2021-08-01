@@ -1,0 +1,28 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px;
+  &__label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    // > * {
+    //   height: 1.5rem;
+    //   border-radius: 5px;
+    // }
+  }
+  &__start-switcher {
+    height: 15px;
+    display: flex;
+    position: relative;
+    top: 0.5px;
+  }
+}
+
+.wrapper {
+  width: fit-content;
+  height: fit-content;
+  // aspect-ratio: 0.55;
+  background-color: rgba(255, 255, 255, 0.4) !important;
+}
