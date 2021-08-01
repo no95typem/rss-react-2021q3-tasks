@@ -6,12 +6,17 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "moduleResolution": "node",
-    "rootDir": "src",
+    "rootDir": "./",
+    "outDir": "./dist",
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "downlevelIteration": true
   },
+  "include": [
+    "src"
+  ],
   "exclude": [
     "configs",
     "dist",

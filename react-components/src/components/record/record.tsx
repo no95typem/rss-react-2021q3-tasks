@@ -1,18 +1,13 @@
 /* eslint-disable react/display-name */
 import * as React from 'react';
 import { Layer } from 'sancho';
-
-import { DateInput } from '@blueprintjs/datetime';
-import { Switch } from '@blueprintjs/core';
-
 import { ImgUploader } from '../img-loader/extenders/img-uploader/img-uploader';
 import { DataRecordTitle } from './title/title';
 import { StarSwitcher } from '../star-switcher/star-switcher';
-
-import styles from './record.scss';
-
 import { Validable } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
+
+import styles from './record.scss';
 
 class GenresClass {
   readonly 'undefined' = '';
@@ -126,20 +121,13 @@ export const DataRecord = React.forwardRef(
           </label>
           <label className={styles.root__label}>
             {TEXT_CONTENT.releaseDateLabel}
-            <DateInput
-              fill={true}
-              formatDate={date => date.toLocaleDateString()}
-              parseDate={str => new Date(str)}
-              placeholder={'DD.MM.YYYY'}
-              value={props.data.releaseDate || null}
-              minDate={new Date('0001-01-01')}
-              maxDate={new Date('2050-12-31')}
-              onChange={e =>
-                props.params.onChange(
-                  convertDateToFakeReactChangeEvent(e),
-                  'releaseDate',
-                )
-              }
+            <input
+              type="date"
+              className={'bp3-input'}
+              value={props.data.releaseDate?.toISOString().slice(0, 10) || ''}
+              min="0001-01-01"
+              max="2049-12-31"
+              onChange={e => props.params.onChange(e, 'releaseDate')}
             />
           </label>
           <label className={styles.root__label}>
@@ -158,14 +146,13 @@ export const DataRecord = React.forwardRef(
               onChange={e => props.params.onChange(e, 'rating')}
             />
           </label>
-          <Switch
-            innerLabel="pin"
-            innerLabelChecked="unpin"
+          <input
+            type="checkbox"
             checked={props.data.pinned}
             onChange={e =>
               props.params.onChange(e as unknown as React.ChangeEvent, 'pinned')
             }
-          ></Switch>
+          ></input>
         </fieldset>
       </Layer>
     );

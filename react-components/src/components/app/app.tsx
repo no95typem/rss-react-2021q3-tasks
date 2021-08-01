@@ -89,8 +89,7 @@ export default class App extends React.Component<Record<string, unknown>> {
           if (input.checked) record.pinnedOrder = --this.lastGivedOrder;
           else record.pinnedOrder = 0;
         } else if (key === 'rating') record[key] = +input.value;
-        else if (key === 'releaseDate')
-          record[key] = input.value as unknown as Date;
+        else if (key === 'releaseDate') record[key] = new Date(input.value);
         else record[key] = input.value as Genres;
         return { memory };
       }

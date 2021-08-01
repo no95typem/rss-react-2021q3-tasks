@@ -86,10 +86,8 @@ export class FormAddItem extends React.Component<{
       const input = e.target as HTMLInputElement;
       if (key === 'owned' || key === 'pinned') data[key] = input.checked;
       else if (key === 'rating') data[key] = +input.value;
-      else if (key === 'releaseDate')
-        data[key] = input.value as unknown as Date;
+      else if (key === 'releaseDate') data[key] = new Date(input.value);
       else data[key] = input.value as Genres;
-      if (key === 'imgBase64') console.log(e);
       return { data };
     });
   };

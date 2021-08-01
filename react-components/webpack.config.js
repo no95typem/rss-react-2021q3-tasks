@@ -43,6 +43,7 @@ module.exports = {
       {
         test: [/\.[tj]sx?$/],
         include: path.join(__dirname, 'src'),
+        // use: isDevelopment ? 'babel-loader' : 'ts-loader',
         use: 'babel-loader',
       },
       {
