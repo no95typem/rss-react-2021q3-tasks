@@ -39,7 +39,7 @@ export class FormAddItem extends React.Component<{
   render(): JSX.Element {
     return (
       <div className={styles.root}>
-        <form className={styles.root__form}>
+        <form className={styles.root__form} onSubmit={e => e.preventDefault()}>
           <h3>Create new card</h3>
 
           <DataRecord

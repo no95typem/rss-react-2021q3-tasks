@@ -46,7 +46,10 @@ export class ImgUploader extends ImgLoader<ImgLoaderProps> {
           <button
             className={styles.root__btn}
             aria-controls={this.collapseId}
-            onClick={() => this.setState({ opened: !this.state.opened })}
+            onClick={e => {
+              e.preventDefault();
+              this.setState({ opened: !this.state.opened });
+            }}
           >
             {this.state.opened ? 'Collapse' : 'Change'}
           </button>
@@ -61,6 +64,7 @@ export class ImgUploader extends ImgLoader<ImgLoaderProps> {
                     type="file"
                     onChange={this.handleUpload}
                     onClick={e => {
+                      e.stopPropagation();
                       (e.target as HTMLInputElement).value = '';
                     }}
                   />
