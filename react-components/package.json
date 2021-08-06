@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-preset-minify": "^0.5.1",
     "ts-loader": "^9.2.4"
   },
   "devDependencies": {
