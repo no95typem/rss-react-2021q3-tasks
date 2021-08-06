@@ -6,7 +6,8 @@ import styles from './record.scss';
 
 export type DataRecordData = {
   id: string;
-  imgBase64?: string;
+  src?: string;
+  loadSuccess?: boolean;
 };
 
 export const DataRecord: React.FC<{
@@ -14,7 +15,7 @@ export const DataRecord: React.FC<{
 }> = (props: { data: DataRecordData }) => {
   return (
     <figure className={styles.root}>
-      <ImgLoader base64={props.data.imgBase64} />
+      <ImgLoader base64={props.data.src} />
     </figure>
   );
 };

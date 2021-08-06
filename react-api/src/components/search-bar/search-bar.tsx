@@ -22,6 +22,9 @@ export const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         type="text"
         value={props.text || ''}
         onChange={props.onChange}
+        onKeyDown={e => {
+          if (e.key === 'Enter') props.onSubmit?.();
+        }}
       ></input>
     </div>
   );

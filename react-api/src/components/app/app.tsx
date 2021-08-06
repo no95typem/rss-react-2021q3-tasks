@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { FormAddItem } from '../form/form-add-item';
-import { ContentBox } from '../content-box/content-box';
+
 import { DataRecordData } from '../record/record';
 
 import styles from './app.scss';
+import Gallery from '../gallery/gallery';
 
 type AppState = {
   memory: Record<string, DataRecordData>;
@@ -43,11 +43,14 @@ export default class App extends React.Component<Record<string, unknown>> {
             const item = it as Record<string, string>;
             const data: DataRecordData = {
               id: item.id,
-              imgBase64: item.thumbs.small as unknown as string,
+              src: item.thumbs.small as unknown as string,
             };
             dataObj[data.id] = data;
           });
           res(dataObj);
+        })
+        .catch(() => {
+          console.log('err');
         });
     });
   }
@@ -66,16 +69,15 @@ export default class App extends React.Component<Record<string, unknown>> {
   }
 
   componentDidMount() {
-    App.testWallheaven().then(dataObj => {
-      this.setState({ memory: dataObj });
-    });
+    // App.testWallheaven().then(dataObj => {
+    //   this.setState({ memory: dataObj });
+    // });
   }
 
   public render = (): JSX.Element => {
     return (
       <div className={styles.app} ref={this.root}>
-        <FormAddItem></FormAddItem>
-        <ContentBox memory={this.state.memory} />
+        <Gallery memory={this.state.memory} />
       </div>
     );
   };

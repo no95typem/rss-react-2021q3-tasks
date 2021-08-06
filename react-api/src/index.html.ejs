@@ -4,6 +4,12 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>React Components</title>
+        <!-- Dependencies -->
+        <% if (webpackConfig.mode == 'production') { %>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@4.16.10/dist/antd.min.css">
+        <% } else { %>
+        <link rel="stylesheet" href="../node_modules/antd/dist/antd.css">
+        <% } %>
     </head>
     <body>
         <div id="root"></div>
