@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { notification } from 'antd';
+import { IconType } from 'antd/lib/notification';
 import { DEFALUT_WHQUERY, WHQuery, WHPagination } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
 import { genUniqId } from '../../lib/generators/generators';
@@ -9,10 +10,9 @@ import { WHSorting } from '../../wallheaven-types/sorting';
 import { ContentBox } from '../content-box/content-box';
 import { DataRecordData } from '../record/record';
 import { WHSearchBox } from '../wh-search-box/wh-search-box';
+import { QueueManager } from '../../lib/misc/queue-manager';
 
 import styles from './gallery.scss';
-import { QueueManager } from '../../lib/misc/queue-manager';
-import { IconType } from 'antd/lib/notification';
 
 const fakeImg = require('../../assets/2.jpg');
 
@@ -148,6 +148,7 @@ const calcWHQueryStr = (query: WHQuery): string => {
   const pageStr = `&page=${query.page}`;
   const queryStr = `search?q=${q}${filtersStr}&sorting=${query.sorting}${pageStr}${apiKeyStr}`;
   return `http://localhost:3020/http://wallhaven.cc/api/v1/${queryStr}`;
+  // return `http://wallhaven.cc/api/v1/${queryStr}`;
 };
 
 const loadDataFromWH = (

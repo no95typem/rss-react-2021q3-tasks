@@ -6,14 +6,13 @@
         <title>React Components</title>
         <!-- Dependencies -->
         <% if (webpackConfig.mode == 'production') { %>
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@4.16.10/dist/antd.min.css">
         <% } else { %>
         <link rel="stylesheet" href="../node_modules/antd//dist/antd.css">
         <% } %>
     </head>
     <body>
         <div id="root"></div>
-
         <!-- Dependencies -->
         <% if (webpackConfig.mode == 'production') { %>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js" integrity="sha512-qlzIeUtTg7eBpmEaS12NZgxz52YYZVF5myj89mjJEesBd/oE9UPsYOX2QAXzvOAZYEvQohKdcY8zKE02ifXDmA==" crossorigin="anonymous"></script>

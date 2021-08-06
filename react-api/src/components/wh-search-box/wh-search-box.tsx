@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Select, Input, Pagination, notification } from 'antd';
+import { IconType } from 'antd/lib/notification';
 import { WHPagination, WHQuery } from '../../defs';
 import { SearchBar } from '../search-bar/search-bar';
-
-import styles from './wh-search-box.scss';
 import { WHCategories } from '../../wallheaven-types/categories';
 import { WHPurities } from '../../wallheaven-types/purity';
 import { WHSortings } from '../../wallheaven-types/sorting';
-import { IconType } from 'antd/lib/notification';
+
+import styles from './wh-search-box.scss';
 
 export interface WHSearchBoxProps {
   query: WHQuery;
