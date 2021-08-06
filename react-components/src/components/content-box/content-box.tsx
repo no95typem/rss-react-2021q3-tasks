@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { jsx } from '@emotion/core';
 import { DataRecord, DataRecordData } from '../record/record';
 import { SearchBar } from '../search-bar/search-bar';
 

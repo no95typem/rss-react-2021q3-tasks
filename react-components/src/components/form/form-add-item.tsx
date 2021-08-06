@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Divider, Layer, Text, Toolbar } from 'sancho';
+
 import { Validable } from '../../defs';
 import { genUniqId } from '../../lib/generators/generators';
 import { DataRecord, DataRecordData, Genres } from '../record/record';
@@ -36,28 +36,20 @@ export class FormAddItem extends React.Component<{
 
   render(): JSX.Element {
     return (
-      <Layer className={styles.root}>
+      <div className={styles.root}>
         <form className={styles.root__form}>
-          <Text gutter={false} variant="uppercase">
-            Create new card
-          </Text>
+          <h3>Create new card</h3>
 
           <DataRecord
             data={this.state.data}
             params={{ full: false, onChange: this.handleRecordDataChange }}
             ref={this.dataRecord}
           />
-          <Button
-            type="submit"
-            intent="primary"
-            size="sm"
-            onPress={this.handleSubmit}
-            onClick={e => e.preventDefault()}
-          >
+          <button type="submit" onClick={this.handleSubmit}>
             {this.TEXT_CONTENT.btnSbt}
-          </Button>
+          </button>
         </form>
-      </Layer>
+      </div>
     );
   }
 

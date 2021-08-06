@@ -1,13 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import {
-  Button,
-  Collapse,
-  IconChevronDown,
-  IconChevronUp,
-  Layer,
-} from 'sancho';
 import { genUniqId } from '../../../../lib/generators/generators';
 
 import { ImgLoader, ImgLoaderProps, ImgLoaderState } from '../../img-loader';
@@ -49,23 +42,18 @@ export class ImgUploader extends ImgLoader<ImgLoaderProps> {
     return (
       <div className={styles.root}>
         {super.render()}
-        <Layer className={styles['root__btn-layer']}>
-          <Button
+        <div className={styles['root__btn-layer']}>
+          <button
             className={styles.root__btn}
             aria-controls={this.collapseId}
-            variant="ghost"
-            intent="primary"
-            iconAfter={
-              this.state.opened ? <IconChevronUp /> : <IconChevronDown />
-            }
             onClick={() => this.setState({ opened: !this.state.opened })}
           >
             {this.state.opened ? 'Collapse' : 'Change'}
-          </Button>
-          <Collapse id={this.collapseId} show={this.state.opened}>
+          </button>
+          <div id={this.collapseId}>
             <div className={styles.root__collapsable}>
               {' '}
-              <Button size="xs" intent="success">
+              <button>
                 <label>
                   {this.TEXT_CONTENT.btnUpload}
                   <input
@@ -77,10 +65,8 @@ export class ImgUploader extends ImgLoader<ImgLoaderProps> {
                     }}
                   />
                 </label>
-              </Button>
-              <Button
-                size="xs"
-                intent="danger"
+              </button>
+              <button
                 disabled={!this.state.base64 || this.state.base64.length === 0}
                 onClick={e => {
                   e.preventDefault();
@@ -88,10 +74,10 @@ export class ImgUploader extends ImgLoader<ImgLoaderProps> {
                 }}
               >
                 {this.TEXT_CONTENT.btnClear}
-              </Button>
+              </button>
             </div>
-          </Collapse>
-        </Layer>
+          </div>
+        </div>
       </div>
     );
   }

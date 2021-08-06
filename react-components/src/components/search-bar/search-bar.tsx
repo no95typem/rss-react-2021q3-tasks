@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Layer } from 'sancho';
 
 import styles from './search-bar.scss';
 
@@ -14,7 +13,7 @@ export interface SearchBarProps {
 export class SearchBar extends React.Component<SearchBarProps> {
   render() {
     return (
-      <Layer className={styles.root}>
+      <div className={styles.root}>
         <img
           className={styles['root__magnifying-glass']}
           src={magnifyingGlass.default}
@@ -25,7 +24,7 @@ export class SearchBar extends React.Component<SearchBarProps> {
           value={this.props.text || ''}
           onChange={this.props.onChange}
         ></input>
-      </Layer>
+      </div>
     );
   }
 }

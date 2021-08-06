@@ -2,6 +2,12 @@
 // Please do not change this file!
 interface CssExports {
   'root': string;
+  'root__input': string;
+  'root__switch': string;
+  'root__switch-ball': string;
+  'root__text': string;
+  'root__text-checked': string;
+  'root__text-unchecked': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

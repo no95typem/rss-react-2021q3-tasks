@@ -1,17 +1,13 @@
 import * as React from 'react';
 
-import { jsx } from '@emotion/core';
-import { Button, VisuallyHidden } from 'sancho';
-// import { Button } from '@blueprintjs/core';
 import { FormAddItem } from '../form/form-add-item';
 import { ContentBox } from '../content-box/content-box';
 import { Genres, DataRecordData } from '../record/record';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
+import { PRESETS } from './presets';
+import { ImgUploader } from '../img-loader/extenders/img-uploader/img-uploader';
 
 import styles from './app.scss';
-import { PRESETS } from './presets';
-import { ImgLoader, ImgLoaderProps } from '../img-loader/img-loader';
-import { ImgUploader } from '../img-loader/extenders/img-uploader/img-uploader';
 
 type AppState = {
   memory: Record<string, DataRecordData>;

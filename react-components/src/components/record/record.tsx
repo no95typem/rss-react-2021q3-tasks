@@ -1,6 +1,5 @@
 /* eslint-disable react/display-name */
 import * as React from 'react';
-import { Layer } from 'sancho';
 import { ImgUploader } from '../img-loader/extenders/img-uploader/img-uploader';
 import { DataRecordTitle } from './title/title';
 import { StarSwitcher } from '../star-switcher/star-switcher';
@@ -8,6 +7,7 @@ import { Validable } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
 
 import styles from './record.scss';
+import { Switcher } from '../switcher/switcher';
 
 class GenresClass {
   readonly 'undefined' = '';
@@ -54,14 +54,6 @@ const TEXT_CONTENT_ENG = {
   genreLabel: 'Genre:',
 };
 
-const convertDateToFakeReactChangeEvent = (d: Date): React.ChangeEvent => {
-  const e = {
-    target: {},
-  };
-  (e.target as Record<string, unknown>).value = d;
-  return e as React.ChangeEvent;
-};
-
 export const DataRecord = React.forwardRef(
   (
     props: { data: DataRecordData; params: DataRecordCompParams },
@@ -80,8 +72,8 @@ export const DataRecord = React.forwardRef(
     }));
 
     return (
-      <Layer className={styles.wrapper}>
-        <fieldset className={styles.root} css="outline: none;">
+      <div className={styles.wrapper}>
+        <fieldset className={styles.root}>
           <ImgUploader
             onChange={e => props.params.onChange(e, 'imgBase64')}
             base64={props.data.imgBase64}
@@ -89,7 +81,6 @@ export const DataRecord = React.forwardRef(
           <label className={styles.root__label}>
             {TEXT_CONTENT.artistLabel}
             <input
-              className={'bp3-input'}
               type="text"
               value={props.data.artist}
               onChange={e => props.params.onChange(e, 'artist')}
@@ -98,7 +89,6 @@ export const DataRecord = React.forwardRef(
           <DataRecordTitle
             labelText={TEXT_CONTENT.titleLabel}
             placeholderText={TEXT_CONTENT.titlePlaceholder}
-            inputClassName={'bp3-input'}
             val={props.data.title}
             onChange={e => props.params.onChange(e, 'title')}
             ref={titleComp}
@@ -106,7 +96,6 @@ export const DataRecord = React.forwardRef(
           <label className={styles.root__label}>
             {TEXT_CONTENT.genreLabel}
             <select
-              className={'bp3-input'}
               value={props.data.genre}
               onChange={e => props.params.onChange(e, 'genre')}
             >
@@ -123,7 +112,6 @@ export const DataRecord = React.forwardRef(
             {TEXT_CONTENT.releaseDateLabel}
             <input
               type="date"
-              className={'bp3-input'}
               value={props.data.releaseDate?.toISOString().slice(0, 10) || ''}
               min="0001-01-01"
               max="2049-12-31"
@@ -146,15 +134,14 @@ export const DataRecord = React.forwardRef(
               onChange={e => props.params.onChange(e, 'rating')}
             />
           </label>
-          <input
-            type="checkbox"
+          <Switcher
             checked={props.data.pinned}
-            onChange={e =>
-              props.params.onChange(e as unknown as React.ChangeEvent, 'pinned')
-            }
-          ></input>
+            onChange={e => props.params.onChange(e, 'pinned')}
+            uncheckedText="pin"
+            checkedText="unpin"
+          ></Switcher>
         </fieldset>
-      </Layer>
+      </div>
     );
   },
 );

@@ -1,5 +1,5 @@
 {
-  "name": "React Components",
+  "name": "react-form",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -43,7 +43,6 @@
     "react-dom": "^17.0.2",
     "react-refresh": "^0.10.0",
     "regenerator-runtime": "^0.13.9",
-    "sancho": "^3.5.6",
     "sass": "^1.32.12",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.0.0",
