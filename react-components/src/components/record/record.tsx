@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import * as React from 'react';
 import { ImgUploader } from '../img-loader/extenders/img-uploader/img-uploader';
-import { DataRecordTitle } from './title/title';
+import { ValidableTextInput } from './title/title';
 import { StarSwitcher } from '../star-switcher/star-switcher';
 import { Validable } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
@@ -28,9 +28,9 @@ export type Genres = keyof typeof GenresKeeper;
 
 export type DataRecordData = {
   id: string;
-  artist?: string;
+  artist: string;
   title: string;
-  releaseDate?: Date;
+  releaseDate: Date;
   imgBase64?: string;
   owned: boolean;
   rating?: number;
@@ -46,12 +46,15 @@ export type DataRecordCompParams = {
 
 const TEXT_CONTENT_ENG = {
   artistLabel: 'Artist:',
+  artistPlaceholder: 'Enter artist name',
   titleLabel: 'Title:',
   titlePlaceholder: 'Enter title',
   releaseDateLabel: 'Release:',
+  releaseDateError: 'Please enter a valid date (from 01.01.0001 to 31.12.2049)',
   ownedLabel: 'Owned:',
   ratingLabel: 'Rating:',
   genreLabel: 'Genre:',
+  genreError: 'Please choose a genre from the list',
 };
 
 export const DataRecord = React.forwardRef(
@@ -61,10 +64,48 @@ export const DataRecord = React.forwardRef(
   ) => {
     const TEXT_CONTENT = TEXT_CONTENT_ENG;
 
+    const artistComp = React.useRef<Validable>(null);
     const titleComp = React.useRef<Validable>(null);
+    const genreSelect = React.useRef<HTMLSelectElement>(null);
+    const dateInput = React.useRef<HTMLInputElement>(null);
+
+    const validateGenre = (show: boolean): boolean => {
+      if (!genreSelect.current) return false;
+
+      const valid = genreSelect.current.value in GenresKeeper;
+
+      if (!valid && show) {
+        genreSelect.current.setCustomValidity(TEXT_CONTENT.genreError);
+        genreSelect.current.reportValidity();
+      }
+
+      return valid;
+    };
+
+    const validateDate = (show: boolean): boolean => {
+      if (!dateInput.current) return false;
+
+      const valid =
+        dateInput.current.validity.valid &&
+        !Number.isNaN(Date.parse(dateInput.current.value));
+
+      if (!valid && show) {
+        dateInput.current.setCustomValidity(TEXT_CONTENT.releaseDateError);
+        dateInput.current.reportValidity();
+      }
+
+      return valid;
+    };
 
     const validate = (show: boolean): boolean => {
-      return !!titleComp.current && titleComp.current.validate(show);
+      return (
+        !!artistComp.current &&
+        artistComp.current.validate(show) &&
+        !!titleComp.current &&
+        titleComp.current.validate(show) &&
+        validateGenre(show) &&
+        validateDate(show)
+      );
     };
 
     React.useImperativeHandle(ref, () => ({
@@ -78,15 +119,14 @@ export const DataRecord = React.forwardRef(
             onChange={e => props.params.onChange(e, 'imgBase64')}
             base64={props.data.imgBase64}
           />
-          <label className={styles.root__label}>
-            {TEXT_CONTENT.artistLabel}
-            <input
-              type="text"
-              value={props.data.artist}
-              onChange={e => props.params.onChange(e, 'artist')}
-            ></input>
-          </label>
-          <DataRecordTitle
+          <ValidableTextInput
+            labelText={TEXT_CONTENT.artistLabel}
+            placeholderText={TEXT_CONTENT.artistPlaceholder}
+            val={props.data.artist}
+            onChange={e => props.params.onChange(e, 'artist')}
+            ref={artistComp}
+          />
+          <ValidableTextInput
             labelText={TEXT_CONTENT.titleLabel}
             placeholderText={TEXT_CONTENT.titlePlaceholder}
             val={props.data.title}
@@ -98,6 +138,7 @@ export const DataRecord = React.forwardRef(
             <select
               value={props.data.genre}
               onChange={e => props.params.onChange(e, 'genre')}
+              ref={genreSelect}
             >
               {Object.values(GenresKeeper).map(v => {
                 return (
@@ -116,6 +157,7 @@ export const DataRecord = React.forwardRef(
               min="0001-01-01"
               max="2049-12-31"
               onChange={e => props.params.onChange(e, 'releaseDate')}
+              ref={dateInput}
             />
           </label>
           <label className={styles.root__label}>

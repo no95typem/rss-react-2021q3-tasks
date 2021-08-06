@@ -3,7 +3,7 @@ import { Validable } from '../../../defs';
 
 import styles from '../record.scss';
 
-export interface DataRecordTitleProps {
+export interface ValidableTextInputProps {
   labelText: string;
   placeholderText: string;
   inputClassName?: string;
@@ -16,8 +16,8 @@ const TEXT_CONTENT_ENG = {
 };
 
 // eslint-disable-next-line react/display-name
-export const DataRecordTitle = React.forwardRef(
-  (props: DataRecordTitleProps, ref: React.Ref<Validable>) => {
+export const ValidableTextInput = React.forwardRef(
+  (props: ValidableTextInputProps, ref: React.Ref<Validable>) => {
     const TEXT_CONTENT = TEXT_CONTENT_ENG;
 
     const input = React.useRef<HTMLInputElement>(null);

@@ -29,6 +29,7 @@ export class FormAddItem extends React.Component<{
     return {
       title: '',
       artist: '',
+      releaseDate: new Date(),
       id: genUniqId(),
       owned: false,
     };
