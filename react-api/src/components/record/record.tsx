@@ -8,6 +8,7 @@ export type DataRecordData = {
   id: string;
   src?: string;
   loadSuccess?: boolean;
+  path?: string;
 };
 
 export const DataRecord: React.FC<{

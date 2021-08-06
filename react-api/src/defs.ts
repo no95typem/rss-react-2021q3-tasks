@@ -14,12 +14,19 @@ export class WHQuery {
   ) {}
 }
 
+export type WHPagination = {
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
+};
+
 export const DEFALUT_WHQUERY = OBJ_PROCESSOR.deepFreeze(
   new WHQuery(
     '',
     [WHCategories.general],
     [WHPurities.sfw],
     WHSortings.date_added,
-    0,
+    1,
   ),
 );

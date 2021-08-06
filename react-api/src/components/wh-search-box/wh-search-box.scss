@@ -7,6 +7,15 @@
   &__search-bar {
     max-width: 70%;
   }
+  &__ctls-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    & > * {
+      color: white;
+    }
+  }
   &__parameters-box {
     display: grid;
     grid-auto-columns: auto;

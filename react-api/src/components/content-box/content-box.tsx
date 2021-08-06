@@ -1,39 +1,42 @@
 import * as React from 'react';
-import { Spin } from 'antd';
-import ContentItem from './content-item/content-item';
+import { Spin, Result } from 'antd';
 
+import ContentItem from './content-item/content-item';
 import { DataRecordData } from '../record/record';
 
 import styles from './content-box.scss';
-import { AnimationDef, playAnimation } from '../../lib/gui/animation';
 
 export interface ContentBoxProps {
   memory: Record<string, DataRecordData>;
+  loadFullImgCb: (path: string) => Promise<boolean>;
   onScrollEnd?: () => unknown;
   end?: boolean;
   reset?: boolean;
+  error?: boolean;
+  fetching?: boolean;
 }
 
-const BLUR_FILTER = 'blur(25px)';
+// const BLUR_FILTER = 'blur(25px)';
 
-const BLUR_OUT_ANIM_DEF: AnimationDef = {
-  keyframes: [{ filter: BLUR_FILTER }, { filter: 'blur(0px)' }],
-  options: {
-    duration: 500,
-    fill: 'forwards',
-  },
-};
+// const BLUR_OUT_ANIM_DEF: AnimationDef = {
+//   keyframes: [{ filter: BLUR_FILTER }, { filter: 'blur(0px)' }],
+//   options: {
+//     duration: 500,
+//     fill: 'forwards',
+//   },
+// };
 
 export const ContentBox: React.FC<ContentBoxProps> = (
   props: ContentBoxProps,
 ) => {
   const root = React.useRef<HTMLDivElement>(null);
   const spinDiv = React.useRef<HTMLDivElement>(null);
+  // const [activeItemId, setActiveItemID] = React.useState<string | undefined>();
 
   React.useEffect(() => {
     const div = root.current as HTMLDivElement;
     if (div) {
-      div.onscroll = e => {
+      div.onscroll = () => {
         const rect = spinDiv.current?.getBoundingClientRect();
         const height = window.innerHeight;
         if (rect && rect?.top < height) props.onScrollEnd?.();
@@ -45,33 +48,45 @@ export const ContentBox: React.FC<ContentBoxProps> = (
     return undefined;
   });
 
-  // React.useEffect(() => {
-  //   const div = root.current as HTMLDivElement;
-  //   if (div && props.reset) {
-  //     div.scrollTop = 0;
-  //     div.style.filter = BLUR_FILTER;
-  //   }
-  // });
   const cards = Object.values(props.memory);
   const oneLoaded = cards.some(v => v.loadSuccess !== undefined);
   let content: JSX.Element | JSX.Element[] | undefined;
-  if (cards.length === 0) content = undefined;
-  else if (!oneLoaded) content = <Spin></Spin>;
+  if (props.error)
+    content = (
+      <Result
+        status="error"
+        title="Fetching error"
+        className={styles['content-item_plug']}
+      ></Result>
+    );
+  else if (!oneLoaded && props.fetching)
+    content = <Spin className={styles['content-item_plug']}></Spin>;
   else
     content = cards.map(rec => {
       return (
-        <article key={rec.id} className={styles['content-item']}>
-          <ContentItem {...rec} />
+        <article key={rec.id}>
+          <ContentItem data={rec} loadFullImage={props.loadFullImgCb} />
         </article>
       );
     });
 
   return (
     <div className={styles.root} ref={root}>
-      <div className={styles.root__cards}>{content}</div>
-      <div className={styles['root__spinner-box']} ref={spinDiv}>
-        {props.end ? undefined : <Spin></Spin>}
-      </div>
+      {props.error ? (
+        content
+      ) : (
+        <div className={styles.root__cards}>
+          {content}
+          {props.end || (props.fetching && cards.length === 0) ? undefined : (
+            <div
+              className={`${styles['root__spinner-box']} ${styles['content-item_plug']}`}
+              ref={spinDiv}
+            >
+              <Spin></Spin>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
