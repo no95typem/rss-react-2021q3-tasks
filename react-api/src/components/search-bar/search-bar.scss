@@ -8,7 +8,7 @@
   border: 2px solid black;
   border-radius: 15px;
   padding: 5px 10px;
-  background-color: rgba(255, 255, 255, 0.4) !important;
+  background-color: rgba(255, 255, 255, 0.4);
   &__magnifying-glass {
     height: 80%;
     max-height: 1rem;
@@ -23,5 +23,8 @@
     background-color: rgba(255, 255, 255, 0.0);
     color: black;
     font-size: 16px;
+  }
+  &_disabled {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }

@@ -9,6 +9,8 @@ export class WHQuery {
     public categories: WHCategoriesList,
     public purity: WHPurityList,
     public sorting: WHSorting,
+    public page: number,
+    public apiKey?: string,
   ) {}
 }
 
@@ -18,5 +20,6 @@ export const DEFALUT_WHQUERY = OBJ_PROCESSOR.deepFreeze(
     [WHCategories.general],
     [WHPurities.sfw],
     WHSortings.date_added,
+    0,
   ),
 );

@@ -4,6 +4,7 @@ interface CssExports {
   'root': string;
   'root__input': string;
   'root__magnifying-glass': string;
+  'root_disabled': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -7,7 +7,8 @@ interface CssExports {
   'content-item__text': string;
   'fade-in': string;
   'root': string;
-  'root__content': string;
+  'root__cards': string;
+  'root__spinner-box': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
