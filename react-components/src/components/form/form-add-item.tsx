@@ -8,6 +8,7 @@ import styles from './form-add-item.scss';
 
 export type FormAddItemState = {
   data: DataRecordData;
+  successId?: string;
 };
 
 export class FormAddItem extends React.Component<{
@@ -46,6 +47,9 @@ export class FormAddItem extends React.Component<{
             params={{ full: false, onChange: this.handleRecordDataChange }}
             ref={this.dataRecord}
           />
+          <p style={{ opacity: this.state.successId ? '1' : '0' }}>
+            Successfully added!
+          </p>
           <button type="submit" onClick={this.handleSubmit}>
             {this.TEXT_CONTENT.btnSbt}
           </button>
@@ -65,9 +69,21 @@ export class FormAddItem extends React.Component<{
       data.id = genUniqId();
     }
     this.setState(() => {
-      return { data: FormAddItem.genDefaultData() };
+      return { data: FormAddItem.genDefaultData(), successId: data.id };
     });
   };
+
+  componentDidUpdate() {
+    if (this.state.successId) {
+      const id = this.state.successId;
+      setTimeout(() => {
+        this.setState(pState => {
+          if ((pState as FormAddItemState).successId === id)
+            this.setState({ successId: undefined });
+        });
+      }, 3000);
+    }
+  }
 
   handleRecordDataChange = (
     e: React.ChangeEvent,
@@ -81,7 +97,7 @@ export class FormAddItem extends React.Component<{
       else if (key === 'rating') data[key] = +input.value;
       else if (key === 'releaseDate') data[key] = new Date(input.value);
       else data[key] = input.value as Genres;
-      return { data };
+      return { data, successId: undefined };
     });
   };
 }
