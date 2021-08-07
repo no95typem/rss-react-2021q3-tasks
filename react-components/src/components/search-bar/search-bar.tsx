@@ -11,7 +11,7 @@ export interface SearchBarProps {
 }
 
 export class SearchBar extends React.Component<SearchBarProps> {
-  render() {
+  render(): JSX.Element {
     return (
       <div className={styles.root}>
         <img

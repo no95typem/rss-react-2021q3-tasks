@@ -6,7 +6,7 @@ export class Star extends React.Component<{
   active: boolean;
   onClick: () => void;
 }> {
-  render() {
+  render(): JSX.Element {
     return (
       <label
         className={`${styles.root} ${

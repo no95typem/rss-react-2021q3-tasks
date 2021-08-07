@@ -1,13 +1,14 @@
 /* eslint-disable react/display-name */
 import * as React from 'react';
+
 import { ImgUploader } from '../img-loader/extenders/img-uploader/img-uploader';
 import { ValidableTextInput } from './title/title';
 import { StarSwitcher } from '../star-switcher/star-switcher';
 import { Validable } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
+import { Switcher } from '../switcher/switcher';
 
 import styles from './record.scss';
-import { Switcher } from '../switcher/switcher';
 
 class GenresClass {
   readonly 'undefined' = '';
@@ -57,6 +58,7 @@ const TEXT_CONTENT_ENG = {
   genreError: 'Please choose a genre from the list',
 };
 
+// ? Этот компонент смотрелся бы лучше в виде класса?
 export const DataRecord = React.forwardRef(
   (
     props: { data: DataRecordData; params: DataRecordCompParams },

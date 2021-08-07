@@ -4,8 +4,6 @@ import { FormAddItem } from '../form/form-add-item';
 import { ContentBox } from '../content-box/content-box';
 import { Genres, DataRecordData } from '../record/record';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
-import { PRESETS } from './presets';
-import { ImgUploader } from '../img-loader/extenders/img-uploader/img-uploader';
 
 import styles from './app.scss';
 
@@ -15,9 +13,6 @@ type AppState = {
 };
 
 export default class App extends React.Component<Record<string, unknown>> {
-  static presetsData: DataRecordData[] | undefined;
-
-  // СПИСОК ОТЛОЖЕННОГО КОНТЕНТА
   state: AppState = {
     memory: {},
     hiddenChilds: new Set(),
@@ -26,22 +21,6 @@ export default class App extends React.Component<Record<string, unknown>> {
   private lastGivedOrder = 0;
 
   private root = React.createRef<HTMLDivElement>();
-
-  loadPresets(): void {
-    const presets = PRESETS.slice();
-    presets.forEach(p => {
-      if (p.imgBase64 && p.imgBase64 !== '')
-        ImgUploader.getBase64FromUrl(p.imgBase64).then(base64 => {
-          p.imgBase64 = base64;
-          this.handleNewDataRec(p);
-        });
-      else this.handleNewDataRec(p);
-    });
-  }
-
-  componentDidMount(): void {
-    this.loadPresets();
-  }
 
   public render = (): JSX.Element => {
     return (

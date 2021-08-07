@@ -4,10 +4,6 @@ import styles from './img-loader.scss';
 
 const defaultAvatarSvg = require('./default.svg');
 
-interface HTMLCanvasElementWithValue extends HTMLCanvasElement {
-  value?: string;
-}
-
 export interface ImgLoaderProps {
   onChange?: (e: React.ChangeEvent) => void;
   base64?: string;
@@ -45,10 +41,13 @@ export class ImgLoader<T extends ImgLoaderProps> extends React.Component<T> {
 
   shouldComponentUpdate(
     nextProps: ImgLoaderProps,
+    // ! prop is needed for extenders
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     nextState: ImgLoaderState,
   ): boolean {
     const should =
       this.state.base64?.slice(0, 40) !== nextProps.base64?.slice(0, 40);
+    // ! I really need to set state in this dirty way because otherwise there will be ~6 RErenders!
     // eslint-disable-next-line react/no-direct-mutation-state
     if (should) this.state.base64 = nextProps.base64;
     return should;
@@ -177,7 +176,6 @@ export class ImgLoader<T extends ImgLoaderProps> extends React.Component<T> {
     canvas
       .getContext('2d')
       ?.clearRect(0, 0, this.state.canvasW, this.state.canvasH);
-    // this.handleChange();
     return this.drawDefaultImg();
   }
 

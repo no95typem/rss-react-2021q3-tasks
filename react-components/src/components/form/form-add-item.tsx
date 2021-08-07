@@ -26,13 +26,14 @@ export class FormAddItem extends React.Component<{
 
   private dataRecord = React.createRef<Validable>();
 
-  static genDefaultData() {
+  static genDefaultData(): DataRecordData {
     return {
       title: '',
       artist: '',
       releaseDate: new Date(),
       id: genUniqId(),
       owned: false,
+      genre: 'undefined',
     };
   }
 
@@ -73,7 +74,8 @@ export class FormAddItem extends React.Component<{
     });
   };
 
-  componentDidUpdate() {
+  componentDidUpdate(): void {
+    // ? setState from componentDidUpdate triggers react warning, but how can I reset success msg in a different way?
     if (this.state.successId) {
       const id = this.state.successId;
       setTimeout(() => {

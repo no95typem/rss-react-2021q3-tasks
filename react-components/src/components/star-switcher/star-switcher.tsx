@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { Star } from './subcomps/star/star';
 
 export class StarSwitcher extends React.Component<{
