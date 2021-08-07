@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Image as AntdImage, Skeleton, Result, Spin } from 'antd';
-import { DataRecordData } from '../../record/record';
 
 import styles from '../content-box.scss';
+import { WHImageData } from '../../../defs';
 
 export interface ContentItemProps {
-  data: DataRecordData;
+  data: WHImageData;
   loadFullImage: (src: string) => Promise<boolean>;
 }
 
@@ -15,6 +15,24 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
   );
   const [show, setShow] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
+
+  const handleShow = () => {
+    if (loading) return;
+    setLoading(true);
+    if (props.data.path) {
+      props.loadFullImage(props.data.path).then(success => {
+        if (success) {
+          setFullLoaded(true);
+          setLoading(false);
+          setShow(true);
+        } else {
+          setFullLoaded(false);
+          setLoading(false);
+          setShow(true);
+        }
+      });
+    }
+  };
 
   switch (props.data.loadSuccess) {
     case undefined:
@@ -42,26 +60,7 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
           {fullLoaded === undefined && !loading ? (
             <div
               className={styles['content-item__Image-wall']}
-              onClick={() => {
-                if (loading) return;
-                const loadImg = () => {
-                  if (props.data.path) {
-                    props.loadFullImage(props.data.path).then(success => {
-                      if (success) {
-                        setFullLoaded(true);
-                        setLoading(false);
-                        setShow(true);
-                      } else {
-                        setFullLoaded(false);
-                        setLoading(false);
-                        setShow(true);
-                      }
-                    });
-                  }
-                };
-                setLoading(true);
-                setTimeout(loadImg, 1000);
-              }}
+              onClick={handleShow}
             ></div>
           ) : undefined}
         </div>

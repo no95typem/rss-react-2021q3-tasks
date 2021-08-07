@@ -1,199 +1,67 @@
 import * as React from 'react';
-import { notification } from 'antd';
-import { IconType } from 'antd/lib/notification';
-import { DEFALUT_WHQUERY, WHQuery, WHPagination } from '../../defs';
-import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
-import { genUniqId } from '../../lib/generators/generators';
-import { WHCategoriesList } from '../../wallheaven-types/categories';
-import { WHPurityList } from '../../wallheaven-types/purity';
-import { WHSorting } from '../../wallheaven-types/sorting';
+
 import { ContentBox } from '../content-box/content-box';
-import { DataRecordData } from '../record/record';
 import { WHSearchBox } from '../wh-search-box/wh-search-box';
-import { QueueManager } from '../../lib/misc/queue-manager';
+
+import {
+  DEFALUT_WHQUERY,
+  WHQuery,
+  WHPagination,
+  WHImageData,
+} from '../../defs';
 
 import styles from './gallery.scss';
+import { ImgFetcher } from '../../services/img-fetcher/img-fetcher';
+import {
+  loadDataFromWH,
+  modQuery,
+  WHResponseProcessed,
+} from '../../services/wh-api/wh-api';
 
-const fakeImg = require('../../assets/2.jpg');
+// const fakeImg = require('../../assets/2.jpg');
 
 const WALLHAVEN_WINDOW = 60000;
-const WALLHAVEN_REQ_PER_WINDOW = 700;
+const WALLHAVEN_REQ_PER_WINDOW = 700; // ! in fact 45 req per min for API, for images I don't know...
 
-const IMG_LOAD_QUEUE_MANAGER = new QueueManager<boolean>(
-  async (reqPerWindow: number, firstTimeInWindow: number) => {
-    const throttleTime =
-      reqPerWindow >= WALLHAVEN_REQ_PER_WINDOW
-        ? WALLHAVEN_WINDOW - (Date.now() - firstTimeInWindow)
-        : 0;
-    await new Promise(res => setTimeout(res, throttleTime));
-  },
-  WALLHAVEN_WINDOW,
-);
+const { loadImg } = new ImgFetcher(WALLHAVEN_REQ_PER_WINDOW, WALLHAVEN_WINDOW);
 
+// FOR REACT-ROUTING
 export interface GalleryProps {
-  memory: Record<string, DataRecordData>;
+  memory: Record<string, WHImageData>;
 }
 
 type GalleryMemory = {
-  dataMap: Record<string, DataRecordData>;
+  dataMap: Record<string, WHImageData>;
 };
 
-const loadImg = (src: string) => {
-  const action = async () => {
-    return new Promise<boolean>(res => {
-      const img = new Image();
-      img.onload = () => res(true);
-      img.onerror = () => res(false);
+/* for debugging purpose */
+// const genFakeData = (
+//   count: number,
+//   query: WHQuery,
+// ): [Record<string, DataRecordData>, WHPagination] => {
+//   const fakeMemory: Record<string, DataRecordData> = {};
 
-      img.referrerPolicy = 'no-referrer'; // !
-      img.src = src;
-    });
-  };
-  return IMG_LOAD_QUEUE_MANAGER.do(action);
-};
+//   Array(count)
+//     .fill(null)
+//     .forEach(() => {
+//       const obj: DataRecordData = {
+//         id: genUniqId(),
+//         src: fakeImg.default,
+//         path: fakeImg.default,
+//         loadSuccess: undefined,
+//       };
+//       fakeMemory[obj.id] = obj;
+//     });
 
-const openNSFWNotification = (type: IconType) => {
-  notification[type]({
-    message: 'Woo!',
-    description: `Wallhaven requires API key for NSFW content!
-      Copy your API key and enter it first!
-      DO NOT FORGET TO ALLOW NSFW IN RESULTS IN ACCOUNT SETTINGS!`,
-    btn: (
-      <a
-        href="https://wallhaven.cc/settings/account"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Go to wallhaven profile settings
-      </a>
-    ),
-  });
-};
+//   const fakePagination: WHPagination = {
+//     current_page: query.page,
+//     total: count * 100,
+//     last_page: 100,
+//     per_page: count,
+//   };
 
-const modQuery = (
-  query: WHQuery,
-  key: keyof WHQuery,
-  val: unknown,
-): WHQuery => {
-  const newQuery = OBJ_PROCESSOR.deepClone(query);
-  if (key === 'q') newQuery[key] = val as string;
-  else if (key === 'categories') newQuery[key] = val as WHCategoriesList;
-  else if (key === 'purity') {
-    if (
-      (val as WHPurityList).includes('nsfw') &&
-      (!query.apiKey || query.apiKey === '')
-    )
-      openNSFWNotification('error');
-    else newQuery[key] = val as WHPurityList;
-  } else if (key === 'sorting') newQuery[key] = val as WHSorting;
-  else if (key === 'page') {
-    const int = Number.parseInt(`${val}`, 10);
-    if (!Number.isNaN(int)) newQuery[key] = int;
-  } else if (key === 'apiKey') {
-    newQuery[key] = val as string;
-    if (val === '' && query.purity.includes('nsfw'))
-      newQuery.purity = query.purity.filter(item => item !== 'nsfw');
-  }
-  return newQuery;
-};
-
-const genFakeData = (
-  count: number,
-  query: WHQuery,
-): [Record<string, DataRecordData>, WHPagination] => {
-  const fakeMemory: Record<string, DataRecordData> = {};
-
-  Array(count)
-    .fill(null)
-    .forEach(() => {
-      const obj: DataRecordData = {
-        id: genUniqId(),
-        src: fakeImg.default,
-        path: fakeImg.default,
-        loadSuccess: undefined,
-      };
-      fakeMemory[obj.id] = obj;
-    });
-
-  const fakePagination: WHPagination = {
-    current_page: query.page,
-    total: count * 100,
-    last_page: 100,
-    per_page: count,
-  };
-
-  return [fakeMemory, fakePagination];
-};
-
-const calcCategoryQuery = (query: WHQuery): string => {
-  const general = query.categories.includes('general') ? 1 : 0;
-  const anime = query.categories.includes('anime') ? 1 : 0;
-  const people = query.categories.includes('people') ? 1 : 0;
-  return `${general}${anime}${people}`;
-};
-
-const calcPurityQuery = (query: WHQuery): string => {
-  const sfw = query.purity.includes('sfw') ? 1 : 0;
-  const sketchy = query.purity.includes('sketchy') ? 1 : 0;
-  const nsfw = query.purity.includes('nsfw') ? 1 : 0;
-  return `${sfw}${sketchy}${nsfw}`;
-};
-
-const calcWHQueryStr = (query: WHQuery): string => {
-  const { q } = query;
-  const categories = calcCategoryQuery(query);
-  const purity = calcPurityQuery(query);
-  const filtersStr = `&categories=${categories}&purity=${purity}`;
-  const apiKeyStr = query.apiKey ? `&apikey=${query.apiKey}` : '';
-  const pageStr = `&page=${query.page}`;
-  const queryStr = `search?q=${q}${filtersStr}&sorting=${query.sorting}${pageStr}${apiKeyStr}`;
-  return `http://localhost:3020/http://wallhaven.cc/api/v1/${queryStr}`;
-  // return `http://wallhaven.cc/api/v1/${queryStr}`;
-};
-
-const loadDataFromWH = (
-  query: WHQuery,
-): Promise<[Record<string, DataRecordData>, WHPagination]> => {
-  return new Promise<[Record<string, DataRecordData>, WHPagination]>(
-    (res, rej) => {
-      const fetchStr = calcWHQueryStr(query);
-      fetch(fetchStr)
-        .then(response => {
-          if (response.ok) return response.json();
-          throw new Error('x');
-        })
-        .then(json => {
-          const obj = json as Record<string, unknown>;
-          const dataObj: Record<string, DataRecordData> = {};
-          (obj.data as Record<string, unknown>[]).forEach(it => {
-            const item = it as Record<string, string>;
-            const data: DataRecordData = {
-              id: item.id,
-              src: item.thumbs.small as unknown as string,
-              path: item.path as unknown as string,
-            };
-            dataObj[data.id] = data;
-          });
-          const meta = obj.meta as Record<string, unknown>;
-          console.log(meta);
-          const pagination: WHPagination = {
-            current_page: meta.current_page as number,
-            last_page: meta.last_page as number,
-            total: meta.total as number,
-            per_page: meta.per_page as number,
-          };
-          res([dataObj, pagination]);
-        })
-        .catch(e => rej(e));
-    },
-  );
-};
-
-type WHResponseProcessed = {
-  data: Record<string, DataRecordData>;
-  loads: Promise<[string, boolean]>[];
-  pagination: WHPagination;
-};
+//   return [fakeMemory, fakePagination];
+// };
 
 const loadData = async (query: WHQuery): Promise<WHResponseProcessed> => {
   const [data, pagination] = await loadDataFromWH(query);
@@ -214,9 +82,8 @@ const loadData = async (query: WHQuery): Promise<WHResponseProcessed> => {
   });
 };
 
-type ReactHookSetter<T> = React.Dispatch<React.SetStateAction<T>>;
-
 const Gallery: React.FC<GalleryProps> = (props: GalleryProps) => {
+  // Может и многовато useState, наверное стоило все в один объект запихнуть memory
   const [query, setQuery] = React.useState<WHQuery>(DEFALUT_WHQUERY);
   const [memory, setMemory] = React.useState<GalleryMemory>({ dataMap: {} });
   const [loads, setLoads] = React.useState<Promise<[string, boolean]>[]>([]);

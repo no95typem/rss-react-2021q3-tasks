@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { Select, Input, Pagination, notification } from 'antd';
-import { IconType } from 'antd/lib/notification';
-import { WHPagination, WHQuery } from '../../defs';
+import { Select, Input, Pagination } from 'antd';
+
 import { SearchBar } from '../search-bar/search-bar';
 import { WHCategories } from '../../wallheaven-types/categories';
 import { WHPurities } from '../../wallheaven-types/purity';
 import { WHSortings } from '../../wallheaven-types/sorting';
+import { openPerPageChangeNotification } from '../../services/open-notification/open-notification';
+
+import { WHPagination, WHQuery } from '../../defs';
 
 import styles from './wh-search-box.scss';
 
@@ -17,23 +19,9 @@ export interface WHSearchBoxProps {
   pagination?: WHPagination;
 }
 
-const openPerPageChangeNotification = (type: IconType) => {
-  notification[type]({
-    message: 'Attention!',
-    description: `Wallhaven API doesn't allow to change items per page!
-      You can do this in your profile settings.
-      DO NOT FORGET TO ENTER YOUR API KEY AFTER THAT!`,
-    btn: (
-      <a
-        href="https://wallhaven.cc/settings/account"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Go to wallhaven profile settings
-      </a>
-    ),
-  });
-};
+const CATEGORIES_SELECT_GOOD_WIDTH = '240px';
+const PURITY_SELECT_GOOD_WIDTH = '210px';
+const SORT_SELECT_GOOD_WIDTH = '115px';
 
 export const WHSearchBox: React.FC<WHSearchBoxProps> = (
   props: WHSearchBoxProps,
@@ -56,7 +44,7 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
             <Select
               mode="multiple"
               value={props.query.categories}
-              style={{ width: '240px' }}
+              style={{ width: CATEGORIES_SELECT_GOOD_WIDTH }}
               onChange={e => props.onChange(e, 'categories')}
             >
               {Object.keys(WHCategories).map(v => {
@@ -73,7 +61,7 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
             <Select
               mode="multiple"
               value={props.query.purity}
-              style={{ width: '210px' }}
+              style={{ width: PURITY_SELECT_GOOD_WIDTH }}
               onChange={e => props.onChange(e, 'purity')}
             >
               {Object.keys(WHPurities).map(v => {
@@ -89,7 +77,7 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
             {'Sort by:'}
             <Select
               value={props.query.sorting}
-              style={{ width: '115px' }}
+              style={{ width: SORT_SELECT_GOOD_WIDTH }}
               onChange={e => props.onChange(e, 'sorting')}
             >
               {Object.keys(WHSortings).map(v => {
@@ -118,7 +106,7 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
           pageSize={props.pagination?.per_page || 10}
           showQuickJumper
           onChange={v => props.onChange(v, 'page')}
-          onShowSizeChange={e => openPerPageChangeNotification('warning')}
+          onShowSizeChange={() => openPerPageChangeNotification('warning')}
           showTotal={total => `Found ${total} pictures`}
         />
       </div>

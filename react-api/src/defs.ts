@@ -3,6 +3,14 @@ import { WHCategories, WHCategoriesList } from './wallheaven-types/categories';
 import { WHPurities, WHPurityList } from './wallheaven-types/purity';
 import { WHSorting, WHSortings } from './wallheaven-types/sorting';
 
+// export type ReactHookSetter<T> = React.Dispatch<React.SetStateAction<T>>;
+
+export type WHImageData = {
+  id: string;
+  src?: string;
+  loadSuccess?: boolean;
+  path?: string;
+};
 export class WHQuery {
   constructor(
     public q: string,
@@ -30,3 +38,5 @@ export const DEFALUT_WHQUERY = OBJ_PROCESSOR.deepFreeze(
     1,
   ),
 );
+
+export const CORS_PROXY = 'http://localhost:3020/';

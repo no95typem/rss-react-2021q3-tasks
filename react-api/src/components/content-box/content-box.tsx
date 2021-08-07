@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Spin, Result } from 'antd';
 
 import ContentItem from './content-item/content-item';
-import { DataRecordData } from '../record/record';
+import { WHImageData } from '../../defs';
 
 import styles from './content-box.scss';
 
 export interface ContentBoxProps {
-  memory: Record<string, DataRecordData>;
+  memory: Record<string, WHImageData>;
   loadFullImgCb: (path: string) => Promise<boolean>;
   onScrollEnd?: () => unknown;
   end?: boolean;
@@ -16,22 +16,11 @@ export interface ContentBoxProps {
   fetching?: boolean;
 }
 
-// const BLUR_FILTER = 'blur(25px)';
-
-// const BLUR_OUT_ANIM_DEF: AnimationDef = {
-//   keyframes: [{ filter: BLUR_FILTER }, { filter: 'blur(0px)' }],
-//   options: {
-//     duration: 500,
-//     fill: 'forwards',
-//   },
-// };
-
 export const ContentBox: React.FC<ContentBoxProps> = (
   props: ContentBoxProps,
 ) => {
   const root = React.useRef<HTMLDivElement>(null);
   const spinDiv = React.useRef<HTMLDivElement>(null);
-  // const [activeItemId, setActiveItemID] = React.useState<string | undefined>();
 
   React.useEffect(() => {
     const div = root.current as HTMLDivElement;
