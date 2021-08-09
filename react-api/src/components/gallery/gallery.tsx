@@ -18,7 +18,9 @@ import {
   WHResponseProcessed,
 } from '../../services/wh-api/wh-api';
 
-// const fakeImg = require('../../assets/2.jpg');
+import { genUniqId } from '../../lib/generators/generators';
+
+const fakeImg = require('../../assets/2.jpg');
 
 const WALLHAVEN_WINDOW = 60000;
 const WALLHAVEN_REQ_PER_WINDOW = 700; // ! in fact 45 req per min for API, for images I don't know...
@@ -35,36 +37,37 @@ type GalleryMemory = {
 };
 
 /* for debugging purpose */
-// const genFakeData = (
-//   count: number,
-//   query: WHQuery,
-// ): [Record<string, DataRecordData>, WHPagination] => {
-//   const fakeMemory: Record<string, DataRecordData> = {};
+const genFakeData = (
+  count: number,
+  query: WHQuery,
+): [Record<string, WHImageData>, WHPagination] => {
+  const fakeMemory: Record<string, WHImageData> = {};
 
-//   Array(count)
-//     .fill(null)
-//     .forEach(() => {
-//       const obj: DataRecordData = {
-//         id: genUniqId(),
-//         src: fakeImg.default,
-//         path: fakeImg.default,
-//         loadSuccess: undefined,
-//       };
-//       fakeMemory[obj.id] = obj;
-//     });
+  Array(count)
+    .fill(null)
+    .forEach(() => {
+      const obj: WHImageData = {
+        id: genUniqId(),
+        src: fakeImg.default,
+        path: fakeImg.default,
+        loadSuccess: undefined,
+      };
+      fakeMemory[obj.id] = obj;
+    });
 
-//   const fakePagination: WHPagination = {
-//     current_page: query.page,
-//     total: count * 100,
-//     last_page: 100,
-//     per_page: count,
-//   };
+  const fakePagination: WHPagination = {
+    current_page: query.page,
+    total: count * 100,
+    last_page: 100,
+    per_page: count,
+  };
 
-//   return [fakeMemory, fakePagination];
-// };
+  return [fakeMemory, fakePagination];
+};
 
 const loadData = async (query: WHQuery): Promise<WHResponseProcessed> => {
   const [data, pagination] = await loadDataFromWH(query);
+  // throw new Error();
   // const [data, pagination] = genFakeData(30, query);
   return new Promise(gRes => {
     const loads = Object.entries(data).map(entry => {
@@ -92,12 +95,14 @@ const Gallery: React.FC<GalleryProps> = (props: GalleryProps) => {
   const [reload, setReload] = React.useState<boolean>(true);
   const [error, setError] = React.useState<boolean>(false);
   const [pagination, setPagination] = React.useState<WHPagination>();
+  const [searchPerformed, setSearchPerformed] = React.useState<boolean>(false);
 
   const loadNew = (more: boolean, specQuery?: WHQuery) => {
     if (fetching || (more && end)) return;
 
     setError(false);
     setFetching(true);
+    setSearchPerformed(true);
 
     const q = specQuery || query;
 
@@ -167,6 +172,7 @@ const Gallery: React.FC<GalleryProps> = (props: GalleryProps) => {
         error={error}
         loadFullImgCb={loadImg}
         fetching={fetching}
+        searchPerformed={searchPerformed}
       />
     </section>
   );

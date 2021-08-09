@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { Select, Input, Pagination } from 'antd';
 
 import { SearchBar } from '../search-bar/search-bar';
 import { WHCategories } from '../../wallheaven-types/categories';
 import { WHPurities } from '../../wallheaven-types/purity';
 import { WHSortings } from '../../wallheaven-types/sorting';
-import { openPerPageChangeNotification } from '../../services/open-notification/open-notification';
+// import { openPerPageChangeNotification } from '../../services/open-notification/open-notification';
 
 import { WHPagination, WHQuery } from '../../defs';
 
 import styles from './wh-search-box.scss';
+import { TagSelect } from '../tag-select/tag-select';
+import { Select } from '../select/select';
+import { Pagination } from '../pagination/pagination';
 
 export interface WHSearchBoxProps {
   query: WHQuery;
@@ -18,10 +20,6 @@ export interface WHSearchBoxProps {
   busy?: boolean;
   pagination?: WHPagination;
 }
-
-const CATEGORIES_SELECT_GOOD_WIDTH = '240px';
-const PURITY_SELECT_GOOD_WIDTH = '210px';
-const SORT_SELECT_GOOD_WIDTH = '115px';
 
 export const WHSearchBox: React.FC<WHSearchBoxProps> = (
   props: WHSearchBoxProps,
@@ -39,66 +37,50 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
       />
       <div className={styles['root__ctls-box']}>
         <div className={styles['root__parameters-box']}>
-          <label className={styles.root__parameter}>
+          <div className={styles.root__parameter}>
             {'Categories:'}
-            <Select
-              mode="multiple"
+            <TagSelect
               value={props.query.categories}
-              style={{ width: CATEGORIES_SELECT_GOOD_WIDTH }}
-              onChange={e => props.onChange(e, 'categories')}
-            >
-              {Object.keys(WHCategories).map(v => {
-                return (
-                  <Select.Option value={v} key={v}>
-                    {v}
-                  </Select.Option>
-                );
+              aria-label={'Categories checkbox toogle button group'}
+              options={Object.keys(WHCategories).map(v => {
+                return { value: v, text: v };
               })}
-            </Select>
-          </label>
-          <label className={styles.root__parameter}>
+              onChange={val => props.onChange(val, 'categories')}
+            />
+          </div>
+          <div className={styles.root__parameter}>
             {'Purity:'}
-            <Select
-              mode="multiple"
+            <TagSelect
               value={props.query.purity}
-              style={{ width: PURITY_SELECT_GOOD_WIDTH }}
-              onChange={e => props.onChange(e, 'purity')}
-            >
-              {Object.keys(WHPurities).map(v => {
-                return (
-                  <Select.Option value={v} key={v}>
-                    {v}
-                  </Select.Option>
-                );
+              aria-label={'Purity checkbox toogle button group'}
+              options={Object.keys(WHPurities).map(v => {
+                return { value: v, text: v };
               })}
-            </Select>
-          </label>
+              onChange={val => props.onChange(val, 'purity')}
+            />
+          </div>
           <label className={styles.root__parameter}>
             {'Sort by:'}
             <Select
               value={props.query.sorting}
-              style={{ width: SORT_SELECT_GOOD_WIDTH }}
-              onChange={e => props.onChange(e, 'sorting')}
-            >
-              {Object.keys(WHSortings).map(v => {
-                return (
-                  <Select.Option value={v} key={v}>
-                    {v}
-                  </Select.Option>
-                );
+              aria-label="Sorting select"
+              onChange={v => props.onChange(v, 'sorting')}
+              options={Object.keys(WHSortings).map(v => {
+                return { value: v, text: v };
               })}
-            </Select>
+            />
           </label>
           <label className={styles.root__parameter}>
             {'API key (is required to set items per page):'}
-            <Input
+            <input
+              className="form-control"
               placeholder="API key"
               value={props.query.apiKey || ''}
               onChange={v => props.onChange(v.target.value, 'apiKey')}
             />
           </label>
         </div>
-        <Pagination
+        {/* <Pagination
           disabled={!props.pagination}
           hideOnSinglePage
           current={props.pagination?.current_page || 1}
@@ -108,6 +90,14 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
           onChange={v => props.onChange(v, 'page')}
           onShowSizeChange={() => openPerPageChangeNotification('warning')}
           showTotal={total => `Found ${total} pictures`}
+        /> */}
+        <Pagination
+          disabled={props.busy}
+          current={props.pagination?.current_page}
+          total={props.pagination?.total}
+          perPage={props.pagination?.per_page}
+          onChange={v => props.onChange(v, 'page')}
+          maxBtns={10}
         />
       </div>
     </div>

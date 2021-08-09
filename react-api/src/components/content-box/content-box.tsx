@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Spin, Result } from 'antd';
 
 import ContentItem from './content-item/content-item';
+import { SpinnerBorder } from '../spinner-border/spinner-border';
 import { WHImageData } from '../../defs';
 
 import styles from './content-box.scss';
@@ -14,6 +14,7 @@ export interface ContentBoxProps {
   reset?: boolean;
   error?: boolean;
   fetching?: boolean;
+  searchPerformed?: boolean;
 }
 
 export const ContentBox: React.FC<ContentBoxProps> = (
@@ -39,18 +40,22 @@ export const ContentBox: React.FC<ContentBoxProps> = (
 
   const cards = Object.values(props.memory);
   const oneLoaded = cards.some(v => v.loadSuccess !== undefined);
+
   let content: JSX.Element | JSX.Element[] | undefined;
+
   if (props.error)
     content = (
-      <Result
-        status="error"
-        title="Fetching error"
-        className={styles['content-item_plug']}
-      ></Result>
+      <div className="alert alert-danger" role="alert">
+        Fetching error!
+      </div>
     );
   else if (!oneLoaded && props.fetching)
-    content = <Spin className={styles['content-item_plug']}></Spin>;
-  else
+    content = (
+      <div className={styles['content-item_plug']}>
+        <SpinnerBorder />;
+      </div>
+    );
+  else if (cards.length > 0)
     content = cards.map(rec => {
       return (
         <article key={rec.id}>
@@ -58,10 +63,29 @@ export const ContentBox: React.FC<ContentBoxProps> = (
         </article>
       );
     });
+  else if (props.searchPerformed)
+    content = (
+      <div className="alert alert-light" role="alert">
+        Found nothing
+      </div>
+    );
+  else
+    content = (
+      <div
+        className="alert alert-primary d-flex align-items-center"
+        role="alert"
+        style={{ gap: '10px' }}
+      >
+        <div>
+          <i className="bi-search"></i>
+        </div>
+        <div>Search anything!</div>
+      </div>
+    );
 
   return (
     <div className={styles.root} ref={root}>
-      {props.error ? (
+      {props.error || cards.length === 0 ? (
         content
       ) : (
         <div className={styles.root__cards}>
@@ -71,7 +95,7 @@ export const ContentBox: React.FC<ContentBoxProps> = (
               className={`${styles['root__spinner-box']} ${styles['content-item_plug']}`}
               ref={spinDiv}
             >
-              <Spin></Spin>
+              <SpinnerBorder />
             </div>
           )}
         </div>

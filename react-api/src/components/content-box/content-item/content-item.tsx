@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image as AntdImage, Skeleton, Result, Spin } from 'antd';
+// import { Image as AntdImage, Skeleton, Result, Spin } from 'antd';
 
 import styles from '../content-box.scss';
 import { WHImageData } from '../../../defs';
@@ -36,16 +36,15 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
 
   switch (props.data.loadSuccess) {
     case undefined:
-      return (
-        <Skeleton.Button
-          active={true}
-          className={styles['content-item__skeleton']}
-        />
-      );
+      return <div></div>;
+    // <Skeleton.Button
+    //   active={true}
+    //   className={styles['content-item__skeleton']}
+    // />
     case true:
       return (
         <div className={styles['content-item__wrapper']}>
-          <AntdImage
+          {/* <AntdImage
             width="100%"
             src={fullLoaded === true ? props.data.path : props.data.src}
             className={styles['content-item_Image']}
@@ -56,7 +55,8 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
               },
               mask: loading ? <Spin></Spin> : undefined,
             }}
-          ></AntdImage>
+          ></AntdImage> */}
+          <img src={props.data.src} alt="" width="100%" />
           {fullLoaded === undefined && !loading ? (
             <div
               className={styles['content-item__Image-wall']}
@@ -67,13 +67,12 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
       );
     case false:
     default:
-      return (
-        <Result
-          status="error"
-          subTitle="load failed"
-          className={styles['content-item__text']}
-        />
-      );
+      return <div></div>;
+    // <Result
+    //   status="error"
+    //   subTitle="load failed"
+    //   className={styles['content-item__text']}
+    // />
   }
 };
 

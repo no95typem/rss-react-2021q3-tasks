@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Spin } from 'antd';
+// import { Spin } from 'antd';
 
 import styles from './search-bar.scss';
 
@@ -33,7 +33,7 @@ export const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           if (e.key === 'Enter') props.onSubmit?.();
         }}
       ></input>
-      {props.busy ? <Spin size="small"></Spin> : undefined}
+      {/* {props.busy ? <Spin size="small"></Spin> : undefined} */}
     </div>
   );
 };
