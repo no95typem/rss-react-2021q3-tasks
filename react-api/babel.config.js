@@ -5,7 +5,7 @@ module.exports = api => {
     presets: [
       '@babel/preset-env',
       // Enable development transform of React with new automatic runtime
-      ...(api.env('production') ? ['minify'] : []),
+      ...(api.env('production') ? [['minify', { builtIns: false }]] : []),
       [
         '@babel/preset-react',
         { development: !api.env('production'), runtime: 'automatic' },

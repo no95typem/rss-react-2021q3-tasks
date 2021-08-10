@@ -12,6 +12,8 @@ import styles from './wh-search-box.scss';
 import { TagSelect } from '../tag-select/tag-select';
 import { Select } from '../select/select';
 import { Pagination } from '../pagination/pagination';
+import { BootstrapModal } from '../../lib/react/components/bootstrap-modal';
+import { genUniqId } from '../../lib/generators/generators';
 
 export interface WHSearchBoxProps {
   query: WHQuery;
@@ -24,6 +26,8 @@ export interface WHSearchBoxProps {
 export const WHSearchBox: React.FC<WHSearchBoxProps> = (
   props: WHSearchBoxProps,
 ) => {
+  const [perPageError, setPerPageError] = React.useState(false);
+
   return (
     <div className={styles.root}>
       <SearchBar
@@ -97,8 +101,29 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
           total={props.pagination?.total}
           perPage={props.pagination?.per_page}
           onChange={v => props.onChange(v, 'page')}
+          onPerPageChange={v => setPerPageError(true)}
           maxBtns={10}
         />
+        {perPageError ? (
+          <BootstrapModal
+            id={genUniqId()}
+            ariaLabel="Settings change error"
+            title="Settings change error"
+            body="Wallhaven API doesn't allow to change items per page!
+                  You can do this in your profile settings.
+                  DO NOT FORGET TO ENTER YOUR API KEY AFTER THAT!"
+            btnText="Go to settings"
+            onClose={() => setPerPageError(false)}
+            onOk={() => {
+              setPerPageError(false);
+              const a = document.createElement('a');
+              a.href = 'https://wallhaven.cc/settings/account';
+              a.target = '_blank';
+              a.referrerPolicy = 'noreferrer';
+              a.click();
+            }}
+          />
+        ) : undefined}
       </div>
     </div>
   );

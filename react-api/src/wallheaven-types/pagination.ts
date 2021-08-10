@@ -4,6 +4,8 @@ class WHPaginationVariantsClass {
   readonly '24' = '24';
 
   readonly '32' = '32';
+
+  readonly '64' = '64';
 }
 
 export const WHPaginationVariants = OBJ_PROCESSOR.deepFreeze(

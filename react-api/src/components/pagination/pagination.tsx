@@ -166,6 +166,7 @@ export const Pagination: React.FC<PaginationProps> = (
           options={Object.keys(WHPaginationVariants).map(v => {
             return { value: v, text: v };
           })}
+          onChange={v => props.onPerPageChange?.(Number.parseInt(v, 10))}
         />
       </div>
     </nav>

@@ -3,6 +3,7 @@ import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
 import { WHCategoriesList } from '../../wallheaven-types/categories';
 import { WHPurityList } from '../../wallheaven-types/purity';
 import { WHSorting } from '../../wallheaven-types/sorting';
+import { openNSFWNotification } from '../open-notification/open-notification';
 // import { openNSFWNotification } from '../open-notification/open-notification';
 
 export type WHResponseProcessed = {
@@ -49,7 +50,7 @@ export const modQuery = (
       (val as WHPurityList).includes('nsfw') &&
       (!query.apiKey || query.apiKey === '')
     ) {
-      // openNSFWNotification('error');
+      openNSFWNotification();
     } else newQuery[key] = val as WHPurityList;
   } else if (key === 'sorting') newQuery[key] = val as WHSorting;
   else if (key === 'page') {
