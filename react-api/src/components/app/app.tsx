@@ -14,10 +14,20 @@ import { NotFoundPage } from '../404/404';
 
 import styles from './app.scss';
 import { DetailsPage } from '../details/details';
+import { LOADERS_CONTEXT, SECRET_CONTEXT } from './contexts';
+import { ThreejsTestPage } from '../threejs-test/details';
+import { ImgFetcher } from '../../services/img-fetcher/img-fetcher';
+
+const gallery = <Gallery />;
+
+const WALLHAVEN_WINDOW = 60000;
+const WALLHAVEN_REQ_PER_WINDOW = 700; // ! in fact 45 req per min for API, for images I don't know...
+
+const { loadImg } = new ImgFetcher(WALLHAVEN_REQ_PER_WINDOW, WALLHAVEN_WINDOW);
 
 const Routes: React.FC = () => {
   const location = useLocation();
-  console.log(location);
+  const about = <About />;
   return (
     <SwitchTransition>
       <CSSTransition
@@ -35,18 +45,18 @@ const Routes: React.FC = () => {
       >
         <Switch location={location}>
           <Route exact path="/about">
-            <About />
+            {about}
           </Route>
           <Route exact strict path="/">
-            <Gallery />
+            {gallery}
           </Route>
-          {/* <Route path="/details/:id"> */}
-          <Route path="/details">
+          <Route path="/details/:id">
             <DetailsPage />
           </Route>
-          <Route path="*">
-            <NotFoundPage />
+          <Route path="/three">
+            <ThreejsTestPage />
           </Route>
+          <Route path="*" render={() => <NotFoundPage />}></Route>
         </Switch>
       </CSSTransition>
     </SwitchTransition>
@@ -54,17 +64,33 @@ const Routes: React.FC = () => {
 };
 
 export const App: React.FC = () => {
+  const [apiKey, setApiKey] = React.useState<string | undefined>(undefined);
+
   return (
-    <div className={styles.app}>
-      <BrowserRouter>
-        <nav>
-          <ul>
-            <NavLink to="/">Search</NavLink>
-            <NavLink to="/about">About</NavLink>
-          </ul>
-        </nav>
-        <Routes />
-      </BrowserRouter>
-    </div>
+    <SECRET_CONTEXT.Provider value={{ apiKey, updateApiKey: setApiKey }}>
+      <LOADERS_CONTEXT.Provider value={{ loadImg }}>
+        <div className={styles.app}>
+          <BrowserRouter>
+            <header className="container-fluid">
+              <nav>
+                <ul className="nav nav-pills">
+                  <li className="nav-item">
+                    <NavLink exact strict className="nav-link" to="/">
+                      Search
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink exact className="nav-link" to="/about">
+                      About
+                    </NavLink>
+                  </li>
+                </ul>
+              </nav>
+            </header>
+            <Routes />
+          </BrowserRouter>
+        </div>
+      </LOADERS_CONTEXT.Provider>
+    </SECRET_CONTEXT.Provider>
   );
 };

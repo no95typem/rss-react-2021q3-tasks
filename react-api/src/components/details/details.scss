@@ -1,0 +1,45 @@
+.root {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+
+  &__aside {
+    height: 90%;
+    width: 600px;
+    flex-shrink: 0;
+    padding-right: 10px;
+    &::-webkit-scrollbar {
+      width: 5px; /* Remove scrollbar space */
+      background: transparent; /* Optional: just make scrollbar invisible */
+    }
+    /* Optional: show position indicator in red */
+    &::-webkit-scrollbar-thumb {
+      background-color: purple;
+      border-radius: 25px;
+    }
+  }
+  &__content {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    & > img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+  &__btn-backward {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0.5;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

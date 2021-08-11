@@ -1,7 +1,18 @@
 import * as React from 'react';
 
 import { Canvas } from '@react-three/fiber';
-import { Html, Loader } from '@react-three/drei';
+import {
+  GizmoHelper,
+  GizmoViewport,
+  Html,
+  Loader,
+  MapControls,
+  OrbitControls,
+  PointerLockControls,
+  Stats,
+  TrackballControls,
+  TransformControls,
+} from '@react-three/drei';
 
 import Tiger from '../tiger/Scene';
 
@@ -15,13 +26,16 @@ export const ThreejsTestPage: React.FC = () => {
     <section>
       <h3>threejs playground</h3>
       <Canvas
+        style={{ height: '500px' }}
         gl={{ alpha: true }}
-        camera={{ position: [0, 15, 30], fov: 15 }}
+        camera={{ position: [0, 0, 100], fov: 70 }}
         onCreated={({ gl, camera }) => {
           camera.lookAt(0, 0, 0);
         }}
       >
         <ambientLight />
+        <Stats showPanel={1}></Stats>
+
         <React.Suspense
           fallback={
             <Html center>
@@ -29,8 +43,12 @@ export const ThreejsTestPage: React.FC = () => {
             </Html>
           }
         >
+          <OrbitControls />
+          <TransformControls>
+            <Tiger></Tiger>
+          </TransformControls>
+
           {/* <Model></Model> */}
-          <Tiger></Tiger>
         </React.Suspense>
       </Canvas>
     </section>

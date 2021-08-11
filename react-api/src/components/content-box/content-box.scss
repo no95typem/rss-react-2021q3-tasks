@@ -45,10 +45,6 @@
     }
   }
   &_Image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
     animation-name: fade-in;
     animation-duration: 1s;
     animation-fill-mode: forwards;
@@ -68,6 +64,9 @@
     height: 100%;
     top: 0px;
     left: 0px;
+    &:hover {
+      cursor: zoom-in;
+    }
     // background-color: rgba(255, 0, 0, 0.2);
   }
   &__skeleton {

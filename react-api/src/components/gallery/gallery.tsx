@@ -21,13 +21,9 @@ import {
 import { genUniqId } from '../../lib/generators/generators';
 import { DEFAULT_WH_PER_PAGE_VALUE } from '../../wallheaven-types/pagination';
 import { WHSearchDataItem } from '../../wallheaven-types/wh-search-data';
+import { LOADERS_CONTEXT, SECRET_CONTEXT } from '../app/contexts';
 
 const fakeImg = require('../../assets/2.jpg');
-
-const WALLHAVEN_WINDOW = 60000;
-const WALLHAVEN_REQ_PER_WINDOW = 700; // ! in fact 45 req per min for API, for images I don't know...
-
-const { loadImg } = new ImgFetcher(WALLHAVEN_REQ_PER_WINDOW, WALLHAVEN_WINDOW);
 
 // FOR REACT-ROUTING
 // export interface GalleryProps {
@@ -69,7 +65,10 @@ const genFakeData = (
   return [fakeMemory, fakePagination];
 };
 
-const loadData = async (query: WHQuery): Promise<WHResponseProcessed> => {
+const loadData = async (
+  query: WHQuery,
+  loadImg: (str: string) => Promise<boolean>,
+): Promise<WHResponseProcessed> => {
   // const [data, pagination] = await loadDataFromWH(query);
   // throw new Error();
   const [data, pagination] = genFakeData(30, query);
@@ -101,6 +100,8 @@ const Gallery: React.FC = () => {
   const [pagination, setPagination] = React.useState<WHPaginationData>();
   const [searchPerformed, setSearchPerformed] = React.useState<boolean>(false);
 
+  const { loadImg } = React.useContext(LOADERS_CONTEXT);
+
   const loadNew = (more: boolean, specQuery?: WHQuery) => {
     if (fetching || (more && end)) return;
 
@@ -116,9 +117,8 @@ const Gallery: React.FC = () => {
       setMemory({ dataMap: {} });
     } else q.page++;
 
-    loadData(q)
+    loadData(q, loadImg)
       .then(async response => {
-        // await new Promise(res => setTimeout(res, 1000));
         const newDataMap = more
           ? { ...memory.dataMap, ...response.data }
           : response.data;
@@ -155,12 +155,15 @@ const Gallery: React.FC = () => {
     if (reload) setReload(false);
   });
 
+  const { updateApiKey } = React.useContext(SECRET_CONTEXT);
+
   return (
     <section className={styles.root}>
       <WHSearchBox
         query={query}
         onChange={(val, key) => {
           const newQuery = modQuery(query, key, val);
+          if (key === 'apiKey') updateApiKey?.(newQuery.apiKey);
           setQuery(newQuery);
           if (newQuery.page !== query.page) loadNew(false, newQuery);
         }}

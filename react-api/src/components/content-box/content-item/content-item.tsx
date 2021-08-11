@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useHistory } from 'react-router';
 import { WHSearchDataItemWithLifecycle } from '../../../defs';
 // import { Image as AntdImage, Skeleton, Result, Spin } from 'antd';
 
@@ -34,6 +35,8 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
     }
   };
 
+  const history = useHistory();
+
   switch (props.data.loadSuccess) {
     case undefined:
       return <div></div>;
@@ -44,11 +47,18 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
     case true:
       return (
         <div className={styles['content-item__wrapper']}>
-          <img src={props.data.thumbs.small} alt="" width="100%" />
+          <img
+            className={styles['content-item_Image']}
+            src={props.data.thumbs.small}
+            alt=""
+            width="100%"
+          />
           {fullLoaded === undefined && !loading ? (
             <div
               className={styles['content-item__Image-wall']}
-              onClick={handleShow}
+              onClick={() => {
+                history.push(`/details/${props.data.id}`);
+              }}
             ></div>
           ) : undefined}
         </div>
