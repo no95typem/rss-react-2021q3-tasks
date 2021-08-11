@@ -6,8 +6,8 @@ import { WHSearchBox } from '../wh-search-box/wh-search-box';
 import {
   DEFALUT_WHQUERY,
   WHQuery,
-  WHPagination,
-  WHImageData,
+  WHPaginationData,
+  WHSearchDataItemWithLifecycle,
 } from '../../defs';
 
 import styles from './gallery.scss';
@@ -19,6 +19,8 @@ import {
 } from '../../services/wh-api/wh-api';
 
 import { genUniqId } from '../../lib/generators/generators';
+import { DEFAULT_WH_PER_PAGE_VALUE } from '../../wallheaven-types/pagination';
+import { WHSearchDataItem } from '../../wallheaven-types/wh-search-data';
 
 const fakeImg = require('../../assets/2.jpg');
 
@@ -28,53 +30,55 @@ const WALLHAVEN_REQ_PER_WINDOW = 700; // ! in fact 45 req per min for API, for i
 const { loadImg } = new ImgFetcher(WALLHAVEN_REQ_PER_WINDOW, WALLHAVEN_WINDOW);
 
 // FOR REACT-ROUTING
-export interface GalleryProps {
-  memory: Record<string, WHImageData>;
-}
+// export interface GalleryProps {
+//   memory: Record<string, WHSearchDataItem>;
+// }
 
 type GalleryMemory = {
-  dataMap: Record<string, WHImageData>;
+  dataMap: Record<string, WHSearchDataItemWithLifecycle>;
 };
 
 /* for debugging purpose */
 const genFakeData = (
   count: number,
   query: WHQuery,
-): [Record<string, WHImageData>, WHPagination] => {
-  const fakeMemory: Record<string, WHImageData> = {};
+): [Record<string, WHSearchDataItem>, WHPaginationData] => {
+  const fakeMemory: Record<string, WHSearchDataItem> = {};
 
   Array(count)
     .fill(null)
     .forEach(() => {
-      const obj: WHImageData = {
+      const obj: WHSearchDataItem = {
         id: genUniqId(),
-        src: fakeImg.default,
+        thumbs: {
+          small: fakeImg.default,
+        },
         path: fakeImg.default,
         loadSuccess: undefined,
-      };
+      } as unknown as WHSearchDataItem;
       fakeMemory[obj.id] = obj;
     });
 
-  const fakePagination: WHPagination = {
+  const fakePagination: WHPaginationData = {
     current_page: query.page,
     total: count * 100,
     last_page: 100,
-    per_page: count,
+    per_page: DEFAULT_WH_PER_PAGE_VALUE,
   };
 
   return [fakeMemory, fakePagination];
 };
 
 const loadData = async (query: WHQuery): Promise<WHResponseProcessed> => {
-  const [data, pagination] = await loadDataFromWH(query);
+  // const [data, pagination] = await loadDataFromWH(query);
   // throw new Error();
-  // const [data, pagination] = genFakeData(30, query);
+  const [data, pagination] = genFakeData(30, query);
   return new Promise(gRes => {
     const loads = Object.entries(data).map(entry => {
       return new Promise<[string, boolean]>(res => {
-        if (!entry[1].src) res([entry[1].id, false]);
+        if (!entry[1].thumbs.small) res([entry[1].id, false]);
         else {
-          loadImg(entry[1].src).then(result => {
+          loadImg(entry[1].thumbs.small).then(result => {
             res([entry[1].id, result]);
           });
         }
@@ -85,7 +89,7 @@ const loadData = async (query: WHQuery): Promise<WHResponseProcessed> => {
   });
 };
 
-const Gallery: React.FC<GalleryProps> = (props: GalleryProps) => {
+const Gallery: React.FC = () => {
   // Может и многовато useState, наверное стоило все в один объект запихнуть memory
   const [query, setQuery] = React.useState<WHQuery>(DEFALUT_WHQUERY);
   const [memory, setMemory] = React.useState<GalleryMemory>({ dataMap: {} });
@@ -94,7 +98,7 @@ const Gallery: React.FC<GalleryProps> = (props: GalleryProps) => {
   const [end, setEnd] = React.useState<boolean>(true);
   const [reload, setReload] = React.useState<boolean>(true);
   const [error, setError] = React.useState<boolean>(false);
-  const [pagination, setPagination] = React.useState<WHPagination>();
+  const [pagination, setPagination] = React.useState<WHPaginationData>();
   const [searchPerformed, setSearchPerformed] = React.useState<boolean>(false);
 
   const loadNew = (more: boolean, specQuery?: WHQuery) => {
@@ -114,7 +118,7 @@ const Gallery: React.FC<GalleryProps> = (props: GalleryProps) => {
 
     loadData(q)
       .then(async response => {
-        await new Promise(res => setTimeout(res, 1000));
+        // await new Promise(res => setTimeout(res, 1000));
         const newDataMap = more
           ? { ...memory.dataMap, ...response.data }
           : response.data;

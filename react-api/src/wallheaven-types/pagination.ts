@@ -1,6 +1,6 @@
 import { OBJ_PROCESSOR } from '../lib/processors/obj-processor';
 
-class WHPaginationVariantsClass {
+class WHPerPageValuesClass {
   readonly '24' = '24';
 
   readonly '32' = '32';
@@ -8,10 +8,10 @@ class WHPaginationVariantsClass {
   readonly '64' = '64';
 }
 
-export const WHPaginationVariants = OBJ_PROCESSOR.deepFreeze(
-  new WHPaginationVariantsClass(),
+export const WHPerPageValues = OBJ_PROCESSOR.deepFreeze(
+  new WHPerPageValuesClass(),
 );
 
-export type WHPaginationPerPage = (keyof WHPaginationVariantsClass)[];
+export type WHPerPageValue = keyof WHPerPageValuesClass;
 
-export const DEFAULT_WH_PER_PAGE = '24';
+export const DEFAULT_WH_PER_PAGE_VALUE: WHPerPageValue = '24';

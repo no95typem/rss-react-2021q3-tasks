@@ -6,7 +6,7 @@ import { WHPurities } from '../../wallheaven-types/purity';
 import { WHSortings } from '../../wallheaven-types/sorting';
 // import { openPerPageChangeNotification } from '../../services/open-notification/open-notification';
 
-import { WHPagination, WHQuery } from '../../defs';
+import { WHPaginationData, WHQuery } from '../../defs';
 
 import styles from './wh-search-box.scss';
 import { TagSelect } from '../tag-select/tag-select';
@@ -14,13 +14,14 @@ import { Select } from '../select/select';
 import { Pagination } from '../pagination/pagination';
 import { BootstrapModal } from '../../lib/react/components/bootstrap-modal';
 import { genUniqId } from '../../lib/generators/generators';
+import { DEFAULT_WH_PER_PAGE_VALUE } from '../../wallheaven-types/pagination';
 
 export interface WHSearchBoxProps {
   query: WHQuery;
   onChange: (val: unknown, key: keyof WHQuery) => void;
   onSubmit: () => void;
   busy?: boolean;
-  pagination?: WHPagination;
+  pagination?: WHPaginationData;
 }
 
 export const WHSearchBox: React.FC<WHSearchBoxProps> = (
@@ -84,22 +85,14 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
             />
           </label>
         </div>
-        {/* <Pagination
-          disabled={!props.pagination}
-          hideOnSinglePage
-          current={props.pagination?.current_page || 1}
-          total={props.pagination?.total || 0}
-          pageSize={props.pagination?.per_page || 10}
-          showQuickJumper
-          onChange={v => props.onChange(v, 'page')}
-          onShowSizeChange={() => openPerPageChangeNotification('warning')}
-          showTotal={total => `Found ${total} pictures`}
-        /> */}
         <Pagination
           disabled={props.busy}
           current={props.pagination?.current_page}
           total={props.pagination?.total}
-          perPage={props.pagination?.per_page}
+          perPage={Number.parseInt(
+            (props.pagination?.per_page || DEFAULT_WH_PER_PAGE_VALUE) as string,
+            10,
+          )}
           onChange={v => props.onChange(v, 'page')}
           onPerPageChange={v => setPerPageError(true)}
           maxBtns={10}

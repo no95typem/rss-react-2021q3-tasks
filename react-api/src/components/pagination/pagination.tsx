@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { genUniqId } from '../../lib/generators/generators';
 import {
-  DEFAULT_WH_PER_PAGE,
-  WHPaginationVariants,
+  DEFAULT_WH_PER_PAGE_VALUE,
+  WHPerPageValues,
 } from '../../wallheaven-types/pagination';
 import { Select } from '../select/select';
 
@@ -161,9 +161,9 @@ export const Pagination: React.FC<PaginationProps> = (
       </ul>
       <div style={{ width: 'fit-content', justifySelf: 'end' }}>
         <Select
-          value={`${props.perPage}` || DEFAULT_WH_PER_PAGE}
+          value={`${props.perPage}` || DEFAULT_WH_PER_PAGE_VALUE}
           aria-label="Set items per page"
-          options={Object.keys(WHPaginationVariants).map(v => {
+          options={Object.keys(WHPerPageValues).map(v => {
             return { value: v, text: v };
           })}
           onChange={v => props.onPerPageChange?.(Number.parseInt(v, 10))}

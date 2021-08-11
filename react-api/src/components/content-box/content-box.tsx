@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import ContentItem from './content-item/content-item';
 import { SpinnerBorder } from '../spinner-border/spinner-border';
-import { WHImageData } from '../../defs';
 
 import styles from './content-box.scss';
+import { WHSearchDataItemWithLifecycle } from '../../defs';
 
 export interface ContentBoxProps {
-  memory: Record<string, WHImageData>;
+  memory: Record<string, WHSearchDataItemWithLifecycle>;
   loadFullImgCb: (path: string) => Promise<boolean>;
   onScrollEnd?: () => unknown;
   end?: boolean;

@@ -1,15 +1,18 @@
-import { CORS_PROXY, WHImageData, WHPagination, WHQuery } from '../../defs';
+import { CORS_PROXY, WHPaginationData, WHQuery } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
 import { WHCategoriesList } from '../../wallheaven-types/categories';
 import { WHPurityList } from '../../wallheaven-types/purity';
 import { WHSorting } from '../../wallheaven-types/sorting';
+import {
+  WHSearchDataItem,
+  WHSearchResponse,
+} from '../../wallheaven-types/wh-search-data';
 import { openNSFWNotification } from '../open-notification/open-notification';
-// import { openNSFWNotification } from '../open-notification/open-notification';
 
 export type WHResponseProcessed = {
-  data: Record<string, WHImageData>;
+  data: Record<string, WHSearchDataItem>;
   loads: Promise<[string, boolean]>[];
-  pagination: WHPagination;
+  pagination: WHPaginationData;
 };
 
 const calcCategoryQuery = (query: WHQuery): string => {
@@ -66,8 +69,8 @@ export const modQuery = (
 
 export const loadDataFromWH = (
   query: WHQuery,
-): Promise<[Record<string, WHImageData>, WHPagination]> => {
-  return new Promise<[Record<string, WHImageData>, WHPagination]>(
+): Promise<[Record<string, WHSearchDataItem>, WHPaginationData]> => {
+  return new Promise<[Record<string, WHSearchDataItem>, WHPaginationData]>(
     (res, rej) => {
       const fetchStr = calcWHQueryStr(query);
       fetch(fetchStr)
@@ -76,23 +79,16 @@ export const loadDataFromWH = (
           throw new Error('x');
         })
         .then(json => {
-          const obj = json as Record<string, unknown>;
-          const dataObj: Record<string, WHImageData> = {};
-          (obj.data as Record<string, unknown>[]).forEach(it => {
-            const item = it as Record<string, string>;
-            const data: WHImageData = {
-              id: item.id,
-              src: item.thumbs.small as unknown as string,
-              path: item.path as unknown as string,
-            };
-            dataObj[data.id] = data;
+          const obj = json as WHSearchResponse;
+          const dataObj: Record<string, WHSearchDataItem> = {};
+          obj.data.forEach(it => {
+            dataObj[it.id] = it;
           });
-          const meta = obj.meta as Record<string, unknown>;
-          const pagination: WHPagination = {
-            current_page: meta.current_page as number,
-            last_page: meta.last_page as number,
-            total: meta.total as number,
-            per_page: meta.per_page as number,
+          const pagination: WHPaginationData = {
+            current_page: obj.meta.current_page,
+            last_page: obj.meta.last_page,
+            total: obj.meta.total,
+            per_page: obj.meta.per_page,
           };
           res([dataObj, pagination]);
         })

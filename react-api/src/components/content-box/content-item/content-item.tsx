@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { WHSearchDataItemWithLifecycle } from '../../../defs';
 // import { Image as AntdImage, Skeleton, Result, Spin } from 'antd';
 
 import styles from '../content-box.scss';
-import { WHImageData } from '../../../defs';
 
 export interface ContentItemProps {
-  data: WHImageData;
+  data: WHSearchDataItemWithLifecycle;
   loadFullImage: (src: string) => Promise<boolean>;
 }
 
@@ -44,19 +44,7 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
     case true:
       return (
         <div className={styles['content-item__wrapper']}>
-          {/* <AntdImage
-            width="100%"
-            src={fullLoaded === true ? props.data.path : props.data.src}
-            className={styles['content-item_Image']}
-            preview={{
-              visible: show,
-              onVisibleChange: visible => {
-                if (fullLoaded !== undefined) setShow(visible);
-              },
-              mask: loading ? <Spin></Spin> : undefined,
-            }}
-          ></AntdImage> */}
-          <img src={props.data.src} alt="" width="100%" />
+          <img src={props.data.thumbs.small} alt="" width="100%" />
           {fullLoaded === undefined && !loading ? (
             <div
               className={styles['content-item__Image-wall']}

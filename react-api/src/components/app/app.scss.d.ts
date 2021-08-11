@@ -2,6 +2,10 @@
 // Please do not change this file!
 interface CssExports {
   'app': string;
+  'route_enter': string;
+  'route_enter-active': string;
+  'route_exit': string;
+  'route_exit-active': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

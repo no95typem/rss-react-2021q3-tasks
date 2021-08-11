@@ -1,16 +1,23 @@
 import { OBJ_PROCESSOR } from './lib/processors/obj-processor';
 import { WHCategories, WHCategoriesList } from './wallheaven-types/categories';
+import { WHPerPageValue } from './wallheaven-types/pagination';
 import { WHPurities, WHPurityList } from './wallheaven-types/purity';
 import { WHSorting, WHSortings } from './wallheaven-types/sorting';
+import { WHSearchDataItem } from './wallheaven-types/wh-search-data';
 
 // export type ReactHookSetter<T> = React.Dispatch<React.SetStateAction<T>>;
 
-export type WHImageData = {
-  id: string;
-  src?: string;
+// export type WHImageEssentialData = {
+//   id: string;
+//   src?: string;
+//   loadSuccess?: boolean;
+//   path?: string;
+// };
+
+export interface WHSearchDataItemWithLifecycle extends WHSearchDataItem {
   loadSuccess?: boolean;
-  path?: string;
-};
+}
+
 export class WHQuery {
   constructor(
     public q: string,
@@ -22,10 +29,10 @@ export class WHQuery {
   ) {}
 }
 
-export type WHPagination = {
+export type WHPaginationData = {
   current_page: number;
   last_page: number;
-  per_page: number;
+  per_page: WHPerPageValue;
   total: number;
 };
 
