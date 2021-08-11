@@ -69,9 +69,9 @@ const loadData = async (
   query: WHQuery,
   loadImg: (str: string) => Promise<boolean>,
 ): Promise<WHResponseProcessed> => {
-  // const [data, pagination] = await loadDataFromWH(query);
+  const [data, pagination] = await loadDataFromWH(query);
   // throw new Error();
-  const [data, pagination] = genFakeData(30, query);
+  // const [data, pagination] = genFakeData(30, query);
   return new Promise(gRes => {
     const loads = Object.entries(data).map(entry => {
       return new Promise<[string, boolean]>(res => {

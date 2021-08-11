@@ -15,7 +15,7 @@ import { NotFoundPage } from '../404/404';
 import styles from './app.scss';
 import { DetailsPage } from '../details/details';
 import { LOADERS_CONTEXT, SECRET_CONTEXT } from './contexts';
-import { ThreejsTestPage } from '../threejs-test/details';
+import { ThreejsTestPage } from '../threejs-test/threejs-test';
 import { ImgFetcher } from '../../services/img-fetcher/img-fetcher';
 
 const gallery = <Gallery />;

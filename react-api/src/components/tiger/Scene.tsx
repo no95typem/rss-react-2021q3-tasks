@@ -43,10 +43,10 @@ export default function Tiger(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials, animations } = useGLTF('/scene.gltf') as GLTFResult;
   const { actions } = useAnimations(animations, group);
   useEffect(() => {
-    actions.Eat?.play();
+    actions['Idle_Lie Prone']?.play();
   }, []);
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={group} {...props} dispose={null} renderOrder={2}>
       <group
         position={[0, 0, 0]}
         rotation={[-Math.PI / 2, Math.PI, 0]}

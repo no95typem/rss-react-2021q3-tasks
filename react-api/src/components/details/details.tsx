@@ -88,9 +88,9 @@ const fakeAccessWHWallpaper = (
       ],
     };
     // throw new Error('');
-    setTimeout(() => {
+    // setTimeout(() => {
       res({ ...fake, path: fakeImg.default } as WHWallpaperData);
-    }, 5000);
+    // }, 5000);
   });
 };
 
@@ -150,13 +150,14 @@ export const DetailsPage: React.FC<DetailsPageProps> = (
 
   React.useEffect(() => {
     // console.log(params.id, apiKey);
-    fakeAccessWHWallpaper(params.id, apiKey)
+    // fakeAccessWHWallpaper(params.id, apiKey)
+    accessWHWallpaper(params.id, apiKey)
       .then(data => {
         setImgData(data);
         loadImg(data.path).then(result => {
-          setTimeout(() => {
+          // setTimeout(() => {
             setImgPreloaded(result);
-          }, 2000);
+          // }, 2000);
         });
         setLoaded(true);
       })
