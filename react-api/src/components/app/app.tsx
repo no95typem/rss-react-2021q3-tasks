@@ -16,7 +16,6 @@ import { NotFoundPage } from '../404/404';
 import styles from './app.scss';
 import { DetailsPage } from '../details/details';
 import { LOADERS_CONTEXT, SECRET_CONTEXT } from './contexts';
-import { ThreejsTestPage } from '../threejs-test/threejs-test';
 import { ImgFetcher } from '../../services/img-fetcher/img-fetcher';
 
 const WALLHAVEN_WINDOW = 60000;
@@ -52,9 +51,6 @@ const Routes: React.FC = () => {
           </Route>
           <Route path="/details/:id">
             <DetailsPage />
-          </Route>
-          <Route path="/three">
-            <ThreejsTestPage />
           </Route>
           <Route path="*">
             <NotFoundPage />

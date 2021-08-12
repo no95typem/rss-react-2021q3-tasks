@@ -11,4 +11,4 @@ export interface LoadersContext {
   loadImg: (src: string) => Promise<boolean>;
 }
 
-export const LOADERS_CONTEXT = React.createContext<LoadersContext>(null!)
+export const LOADERS_CONTEXT = React.createContext<LoadersContext>(null!);
