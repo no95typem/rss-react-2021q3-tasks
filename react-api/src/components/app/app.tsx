@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Provider } from 'react-redux';
 import {
   BrowserRouter,
   NavLink,
@@ -18,37 +19,36 @@ import { LOADERS_CONTEXT, SECRET_CONTEXT } from './contexts';
 import { ThreejsTestPage } from '../threejs-test/threejs-test';
 import { ImgFetcher } from '../../services/img-fetcher/img-fetcher';
 
-const gallery = <Gallery />;
-
 const WALLHAVEN_WINDOW = 60000;
 const WALLHAVEN_REQ_PER_WINDOW = 700; // ! in fact 45 req per min for API, for images I don't know...
 
 const { loadImg } = new ImgFetcher(WALLHAVEN_REQ_PER_WINDOW, WALLHAVEN_WINDOW);
 
+const CSS_TRANSITION_CLASSNAMES = {
+  enter: styles.route_enter,
+  enterActive: styles['route_enter-active'],
+  exit: styles.route_exit,
+  exitActive: styles['route_exit-active'],
+};
+
 const Routes: React.FC = () => {
   const location = useLocation();
-  const about = <About />;
+
   return (
     <SwitchTransition>
       <CSSTransition
         key={location.pathname}
-        //
         addEndListener={(node, done) =>
           node.addEventListener('transitionend', done, false)
         }
-        classNames={{
-          enter: styles.route_enter,
-          enterActive: styles['route_enter-active'],
-          exit: styles.route_exit,
-          exitActive: styles['route_exit-active'],
-        }}
+        classNames={CSS_TRANSITION_CLASSNAMES}
       >
         <Switch location={location}>
           <Route exact path="/about">
-            {about}
+            <About />
           </Route>
           <Route exact strict path="/">
-            {gallery}
+            <Gallery />
           </Route>
           <Route path="/details/:id">
             <DetailsPage />
@@ -56,7 +56,9 @@ const Routes: React.FC = () => {
           <Route path="/three">
             <ThreejsTestPage />
           </Route>
-          <Route path="*" render={() => <NotFoundPage />}></Route>
+          <Route path="*">
+            <NotFoundPage />
+          </Route>
         </Switch>
       </CSSTransition>
     </SwitchTransition>

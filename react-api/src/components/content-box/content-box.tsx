@@ -11,10 +11,11 @@ export interface ContentBoxProps {
   loadFullImgCb: (path: string) => Promise<boolean>;
   onScrollEnd?: () => unknown;
   end?: boolean;
-  reset?: boolean;
   error?: boolean;
   fetching?: boolean;
   searchPerformed?: boolean;
+  onScroll?: (scrollTop: number) => unknown;
+  scrollTop?: number;
 }
 
 export const ContentBox: React.FC<ContentBoxProps> = (
@@ -26,7 +27,9 @@ export const ContentBox: React.FC<ContentBoxProps> = (
   React.useEffect(() => {
     const div = root.current as HTMLDivElement;
     if (div) {
+      if (props.scrollTop) div.scrollTop = props.scrollTop;
       div.onscroll = () => {
+        props.onScroll?.(div.scrollTop);
         const rect = spinDiv.current?.getBoundingClientRect();
         const height = window.innerHeight;
         if (rect && rect?.top < height) props.onScrollEnd?.();
@@ -36,7 +39,7 @@ export const ContentBox: React.FC<ContentBoxProps> = (
       };
     }
     return undefined;
-  });
+  }, []);
 
   const cards = Object.values(props.memory);
   const oneLoaded = cards.some(v => v.loadSuccess !== undefined);
@@ -52,7 +55,7 @@ export const ContentBox: React.FC<ContentBoxProps> = (
   else if (!oneLoaded && props.fetching)
     content = (
       <div className={styles['content-item_plug']}>
-        <SpinnerBorder />;
+        <SpinnerBorder />
       </div>
     );
   else if (cards.length > 0)

@@ -89,7 +89,7 @@ const fakeAccessWHWallpaper = (
     };
     // throw new Error('');
     // setTimeout(() => {
-      res({ ...fake, path: fakeImg.default } as WHWallpaperData);
+    res({ ...fake, path: fakeImg.default } as WHWallpaperData);
     // }, 5000);
   });
 };
@@ -101,7 +101,9 @@ const disassembleObjToTable = (
   return (
     <table className="table">
       <thead>
-        <th>{header}</th>
+        <tr>
+          <th colSpan={9999}>{header}</th>
+        </tr>
       </thead>
       <tbody>
         {Object.entries(obj).map(entry => {
@@ -150,13 +152,13 @@ export const DetailsPage: React.FC<DetailsPageProps> = (
 
   React.useEffect(() => {
     // console.log(params.id, apiKey);
-    // fakeAccessWHWallpaper(params.id, apiKey)
-    accessWHWallpaper(params.id, apiKey)
+    fakeAccessWHWallpaper(params.id, apiKey)
+      // accessWHWallpaper(params.id, apiKey)
       .then(data => {
         setImgData(data);
         loadImg(data.path).then(result => {
           // setTimeout(() => {
-            setImgPreloaded(result);
+          setImgPreloaded(result);
           // }, 2000);
         });
         setLoaded(true);
