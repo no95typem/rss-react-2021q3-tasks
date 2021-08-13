@@ -1,7 +1,10 @@
 import { Dispatch } from 'redux';
 import { WHPaginationData, WHQuery } from '../../../defs';
 import { genUniqId } from '../../../lib/generators/generators';
-import { WHResponseProcessed } from '../../../services/wh-api/wh-api';
+import {
+  loadDataFromWH,
+  WHResponseProcessed,
+} from '../../../services/wh-api/wh-api';
 import { DEFAULT_WH_PER_PAGE_VALUE } from '../../../wallheaven-types/pagination';
 import { WHSearchDataItem } from '../../../wallheaven-types/wh-search-data';
 import { State } from '../../state';
@@ -47,9 +50,9 @@ const loadData = async (
   query: WHQuery,
   loadImg: (str: string) => Promise<boolean>,
 ): Promise<WHResponseProcessed> => {
-  // const [data, pagination] = await loadDataFromWH(query);
+  const [data, pagination] = await loadDataFromWH(query);
   // throw new Error();
-  const [data, pagination] = genFakeData(30, query);
+  // const [data, pagination] = genFakeData(30, query);
   return new Promise(gRes => {
     const loads = Object.entries(data).map(entry => {
       return new Promise<[string, boolean]>(res => {
@@ -66,15 +69,12 @@ const loadData = async (
   });
 };
 
-export const Fetch = (
-  more: boolean,
-  loadImg: (str: string) => Promise<boolean>,
-  specQuery?: WHQuery,
-) => {
+export const FetchSearch = (more: boolean, specQuery?: WHQuery) => {
   return (dispatch: Dispatch, getState: () => State): void => {
-    const state = getState().galleryState;
-    const { flags } = state;
-    const query = specQuery || state.query;
+    const state = getState();
+    const { loadImg } = state.coreState.imgFetcher;
+    const { flags } = state.galleryState;
+    const query = specQuery || state.galleryState.query;
     if (flags.fetching || (more && flags.end)) return;
 
     dispatch(setFlag('error', false));
@@ -89,7 +89,7 @@ export const Fetch = (
     loadData(query, loadImg)
       .then(async response => {
         const newDataMap = more
-          ? { ...state.dataMap, ...response.data }
+          ? { ...state.galleryState.dataMap, ...response.data }
           : response.data;
         dispatch(setData(newDataMap));
         dispatch(setPagination(response.pagination));

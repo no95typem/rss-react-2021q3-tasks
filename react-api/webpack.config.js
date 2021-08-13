@@ -36,7 +36,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: isDevelopment ? '/' : '/dist/',
+    publicPath: isDevelopment ? '/' : '/',
     assetModuleFilename: 'assets/[hash][ext]',
   },
   module: {
@@ -111,11 +111,11 @@ module.exports = {
         mode: "write-references",
       },
     }),
-    // new CopyPlugin({
-    //   patterns: [
-    //     { from: './src/public' },
-    //   ],
-    // }),
+    new CopyPlugin({
+      patterns: [
+        { from: './src/public' },
+      ],
+    }),
     !isDevelopment && new CleanWebpackPlugin({ cleanStaleWebpackAssets: false, protectWebpackAssets: false }),
     new webpack.DefinePlugin({
       "process.env": "{}",

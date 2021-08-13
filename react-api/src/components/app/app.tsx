@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import {
   BrowserRouter,
   NavLink,
@@ -9,19 +8,12 @@ import {
 } from 'react-router-dom';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
-import Gallery from '../gallery/gallery';
 import { About } from '../about/about';
 import { NotFoundPage } from '../404/404';
+import { DetailsPageReduxed } from '../details/details';
+import { GalleryReduxed } from '../gallery/gallery';
 
 import styles from './app.scss';
-import { DetailsPage } from '../details/details';
-import { LOADERS_CONTEXT, SECRET_CONTEXT } from './contexts';
-import { ImgFetcher } from '../../services/img-fetcher/img-fetcher';
-
-const WALLHAVEN_WINDOW = 60000;
-const WALLHAVEN_REQ_PER_WINDOW = 700; // ! in fact 45 req per min for API, for images I don't know...
-
-const { loadImg } = new ImgFetcher(WALLHAVEN_REQ_PER_WINDOW, WALLHAVEN_WINDOW);
 
 const CSS_TRANSITION_CLASSNAMES = {
   enter: styles.route_enter,
@@ -47,10 +39,10 @@ const Routes: React.FC = () => {
             <About />
           </Route>
           <Route exact strict path="/">
-            <Gallery />
+            <GalleryReduxed />
           </Route>
           <Route path="/details/:id">
-            <DetailsPage />
+            <DetailsPageReduxed />
           </Route>
           <Route path="*">
             <NotFoundPage />
@@ -62,33 +54,27 @@ const Routes: React.FC = () => {
 };
 
 export const App: React.FC = () => {
-  const [apiKey, setApiKey] = React.useState<string | undefined>(undefined);
-
   return (
-    <SECRET_CONTEXT.Provider value={{ apiKey, updateApiKey: setApiKey }}>
-      <LOADERS_CONTEXT.Provider value={{ loadImg }}>
-        <div className={styles.app}>
-          <BrowserRouter>
-            <header className="container-fluid">
-              <nav>
-                <ul className="nav nav-pills">
-                  <li className="nav-item">
-                    <NavLink exact strict className="nav-link" to="/">
-                      Search
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink exact className="nav-link" to="/about">
-                      About
-                    </NavLink>
-                  </li>
-                </ul>
-              </nav>
-            </header>
-            <Routes />
-          </BrowserRouter>
-        </div>
-      </LOADERS_CONTEXT.Provider>
-    </SECRET_CONTEXT.Provider>
+    <div className={styles.app}>
+      <BrowserRouter>
+        <header className="container-fluid">
+          <nav>
+            <ul className="nav nav-pills">
+              <li className="nav-item">
+                <NavLink exact strict className="nav-link" to="/">
+                  Search
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink exact className="nav-link" to="/about">
+                  About
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <Routes />
+      </BrowserRouter>
+    </div>
   );
 };

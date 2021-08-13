@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { WHPaginationData } from '../../../defs';
-import { GalleryActions } from './gallery-actions.d';
+import { Actions } from '../actions.d';
 
 export interface SetPaginationAction extends Action {
   payload: WHPaginationData;
@@ -8,7 +8,7 @@ export interface SetPaginationAction extends Action {
 
 export const setPagination = (data: WHPaginationData): SetPaginationAction => {
   return {
-    type: GalleryActions.SET_PAGINATION,
+    type: Actions.GALLERY_SET_PAGINATION,
     payload: data,
   };
 };

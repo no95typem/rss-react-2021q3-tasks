@@ -1,40 +1,15 @@
 import * as React from 'react';
 import { useHistory } from 'react-router';
+
 import { WHSearchDataItemWithLifecycle } from '../../../defs';
-// import { Image as AntdImage, Skeleton, Result, Spin } from 'antd';
 
 import styles from '../content-box.scss';
 
 export interface ContentItemProps {
   data: WHSearchDataItemWithLifecycle;
-  loadFullImage: (src: string) => Promise<boolean>;
 }
 
 const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
-  const [fullLoaded, setFullLoaded] = React.useState<boolean | undefined>(
-    undefined,
-  );
-  const [show, setShow] = React.useState<boolean>(false);
-  const [loading, setLoading] = React.useState<boolean>(false);
-
-  const handleShow = () => {
-    if (loading) return;
-    setLoading(true);
-    if (props.data.path) {
-      props.loadFullImage(props.data.path).then(success => {
-        if (success) {
-          setFullLoaded(true);
-          setLoading(false);
-          setShow(true);
-        } else {
-          setFullLoaded(false);
-          setLoading(false);
-          setShow(true);
-        }
-      });
-    }
-  };
-
   const history = useHistory();
 
   switch (props.data.loadSuccess) {
@@ -52,15 +27,10 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
             src={props.data.thumbs.small}
             alt=""
             width="100%"
+            onClick={() => {
+              history.push(`/details/${props.data.id}`);
+            }}
           />
-          {fullLoaded === undefined && !loading ? (
-            <div
-              className={styles['content-item__Image-wall']}
-              onClick={() => {
-                history.push(`/details/${props.data.id}`);
-              }}
-            ></div>
-          ) : undefined}
         </div>
       );
     case false:

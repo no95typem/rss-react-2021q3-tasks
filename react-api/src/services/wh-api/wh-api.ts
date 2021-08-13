@@ -7,6 +7,7 @@ import {
   WHSearchDataItem,
   WHSearchResponse,
 } from '../../wallheaven-types/wh-search-data';
+import { WHWallpaperData } from '../../wallheaven-types/wh-wallpaper-data';
 import { openNSFWNotification } from '../open-notification/open-notification';
 
 export type WHResponseProcessed = {
@@ -95,4 +96,26 @@ export const loadDataFromWH = (
         .catch(e => rej(e));
     },
   );
+};
+
+const WH_API_GET_IMG_BASE_STR = 'https://wallhaven.cc/api/v1/w/';
+
+export const accessWHWallpaper = (
+  id: string,
+  apiKey?: string,
+): Promise<WHWallpaperData> => {
+  return new Promise(res => {
+    fetch(
+      `${CORS_PROXY}${WH_API_GET_IMG_BASE_STR}${id}${
+        apiKey ? `?${apiKey}` : ''
+      }`,
+    )
+      .then(response => {
+        if (response.ok) return response.json();
+        throw new Error('');
+      })
+      .then(json => {
+        res(json.data as WHWallpaperData);
+      });
+  });
 };

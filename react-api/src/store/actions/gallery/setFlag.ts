@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { GalleryFlags } from '../../initials/galleryState';
-import { GalleryActions } from './gallery-actions.d';
+import { Actions } from '../actions.d';
 
 export interface SetFlagAction extends Action {
   payload: { key: GalleryFlags; val: boolean };
@@ -8,7 +8,7 @@ export interface SetFlagAction extends Action {
 
 export const setFlag = (key: GalleryFlags, val: boolean): SetFlagAction => {
   return {
-    type: GalleryActions.SET_FLAG,
+    type: Actions.GALLERY_SET_FLAG,
     payload: { key, val },
   };
 };

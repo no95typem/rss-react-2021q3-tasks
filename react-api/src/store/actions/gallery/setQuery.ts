@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { WHQuery } from '../../../defs';
-import { GalleryActions } from './gallery-actions.d';
+import { Actions } from '../actions.d';
 
 export interface SetQueryAction extends Action {
   payload: WHQuery;
@@ -8,7 +8,7 @@ export interface SetQueryAction extends Action {
 
 export const setQuery = (query: WHQuery): SetQueryAction => {
   return {
-    type: GalleryActions.SET_QUERY,
+    type: Actions.GALLERY_SET_QUERY,
     payload: query,
   };
 };

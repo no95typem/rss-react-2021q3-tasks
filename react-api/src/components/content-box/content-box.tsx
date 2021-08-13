@@ -8,7 +8,6 @@ import { WHSearchDataItemWithLifecycle } from '../../defs';
 
 export interface ContentBoxProps {
   memory: Record<string, WHSearchDataItemWithLifecycle>;
-  loadFullImgCb: (path: string) => Promise<boolean>;
   onScrollEnd?: () => unknown;
   end?: boolean;
   error?: boolean;
@@ -62,7 +61,7 @@ export const ContentBox: React.FC<ContentBoxProps> = (
     content = cards.map(rec => {
       return (
         <article key={rec.id}>
-          <ContentItem data={rec} loadFullImage={props.loadFullImgCb} />
+          <ContentItem data={rec} />
         </article>
       );
     });

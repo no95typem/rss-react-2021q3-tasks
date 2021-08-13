@@ -1,9 +1,10 @@
 import {
-  DEFALUT_WHQUERY,
   WHPaginationData,
   WHQuery,
   WHSearchDataItemWithLifecycle,
 } from '../defs';
+import { ImgFetcher } from '../services/img-fetcher/img-fetcher';
+import { WHWallpaperData } from '../wallheaven-types/wh-wallpaper-data';
 
 export interface GalleryState {
   query: WHQuery;
@@ -19,10 +20,20 @@ export interface GalleryState {
 }
 
 export interface DetailsPageState {
-  wtf: unknown;
+  data?: WHWallpaperData;
+  flags: {
+    dataLoaded: boolean | undefined; // true - success, false - error, undefined - not try
+    imgPreloaded: boolean | undefined; // true - success, false - error, undefined - not try
+  };
+}
+
+export interface CoreState {
+  apiKey?: string;
+  imgFetcher: ImgFetcher;
 }
 
 export interface State {
+  coreState: CoreState;
   galleryState: GalleryState;
   detailsPageState: DetailsPageState;
 }

@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { GalleryActions } from './gallery-actions.d';
+import { Actions } from '../actions.d';
 
 export interface SetContentScrollTopAction extends Action {
   payload: number;
@@ -7,7 +7,7 @@ export interface SetContentScrollTopAction extends Action {
 
 export const setContentScrollTop = (val: number): SetContentScrollTopAction => {
   return {
-    type: GalleryActions.SET_CONTENT_SCROLL_TOP,
+    type: Actions.GALLERY_SET_CONTENT_SCROLL_TOP,
     payload: val,
   };
 };

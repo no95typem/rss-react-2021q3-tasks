@@ -2,7 +2,6 @@
 // Please do not change this file!
 interface CssExports {
   'content-item_Image': string;
-  'content-item__Image-wall': string;
   'content-item__skeleton': string;
   'content-item__text': string;
   'content-item__wrapper': string;
