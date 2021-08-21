@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { Spin } from 'antd';
 
 import styles from './search-bar.scss';
 

@@ -8,9 +8,14 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 
 import '@testing-library/jest-dom';
+import { getByText } from '@testing-library/dom';
+
 import { render, screen } from '../../../test-utils';
 
 import { ContentBox } from '../content-box';
+import ContentItem from '../content-item/content-item';
+import { WHSearchDataItemWithLifecycle } from '../../../defs';
+
 
 describe('ContentBox', () => {
   it('renders', () => {
@@ -35,5 +40,16 @@ describe('ContentBox', () => {
   it('show info for start', () => {
     render(<ContentBox memory={{}} />);
     screen.getByRole('contentinfo');
+  });
+});
+
+describe('content item', () => {
+  it('shows error whel load failed', () => {
+    const failedData: WHSearchDataItemWithLifecycle = {
+      loadSuccess: false,
+    } as WHSearchDataItemWithLifecycle;
+    render(<ContentItem data={failedData} />);
+    const elem = screen.getByRole('status');
+    expect(getByText(elem, /fail/i)).toBeVisible();
   });
 });

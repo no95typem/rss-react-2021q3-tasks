@@ -30,12 +30,26 @@ describe('App', () => {
       </Provider>,
     );
 
-    const search = await screen.findByRole('search');
+    let search = await screen.findByRole('search');
 
     userEvent.type(screen.getByPlaceholderText(/api/i), 'xxx');
     expect(store.getState().coreState.apiKey).toEqual('xxx');
 
-    userEvent.type(search, 'test');
+    userEvent.type(search, 'ERROR');
+    fireEvent(
+      search,
+      new KeyboardEvent('keydown', {
+        bubbles: true,
+        cancelable: true,
+        key: 'Enter',
+      }),
+    );
+
+    await new Promise(res => setTimeout(res, 500));
+
+    expect(await screen.findByRole('alert')).toBeVisible();
+
+    userEvent.type(search, 'zzz');
     fireEvent(
       search,
       new KeyboardEvent('keydown', {
@@ -58,7 +72,7 @@ describe('App', () => {
 
   it('shows the about page', async () => {
     const history = createMemoryHistory();
-    history.push('about');
+    history.push('/about');
     render(
       <Provider store={store}>
         <Router history={history}>
@@ -84,7 +98,7 @@ describe('App', () => {
 
   it('render details and tries to load an img by id and shows alert when fails', async () => {
     const history = createMemoryHistory();
-    history.push('details/testid');
+    history.push('/details/testid');
     render(
       <Provider store={store}>
         <Router history={history}>

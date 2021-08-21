@@ -8,12 +8,12 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 
 import '@testing-library/jest-dom';
-import { fireEvent } from '@testing-library/dom';
+import { findByRole, fireEvent, getByText, queryByText } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import { render, screen } from '../../../test-utils';
 
-import { DEFALUT_WHQUERY } from '../../../defs';
+import { DEFALUT_WHQUERY, WHPaginationData } from '../../../defs';
 import { WHSearchBox } from '../wh-search-box';
 import { WHCategories } from '../../../wallheaven-types/categories';
 
@@ -26,6 +26,36 @@ describe('SearchBox', () => {
     render(
       <WHSearchBox query={query} onChange={() => {}} onSubmit={() => {}} />,
     );
+  });
+
+  it('renders per page error modal', async () => {
+    const pagination: WHPaginationData = {
+      current_page: 1,
+      last_page: 20,
+      per_page: '24',
+      total: 100,
+    };
+
+    render(
+      <WHSearchBox
+        query={query}
+        onChange={() => {}}
+        onSubmit={() => {}}
+        pagination={pagination}
+      />,
+    );
+
+    const selects = screen.getAllByRole('listbox');
+
+    const perPageSelect = selects.find(s =>
+      queryByText(s, pagination.per_page),
+    );
+
+    expect(perPageSelect).toBeVisible();
+
+    userEvent.selectOptions(perPageSelect as HTMLSelectElement, '32');
+
+    expect(screen.getByRole('dialog')).toBeVisible();
   });
 
   it('calls onSubmit', () => {

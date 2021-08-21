@@ -166,7 +166,7 @@ export const Pagination: React.FC<PaginationProps> = (
       <div style={{ width: 'fit-content', justifySelf: 'end' }}>
         <Select
           value={`${props.perPage}` || DEFAULT_WH_PER_PAGE_VALUE}
-          aria-label="Set items per page"
+          ariaLabel="Set items per page"
           options={Object.keys(WHPerPageValues).map(v => {
             return { value: v, text: v };
           })}

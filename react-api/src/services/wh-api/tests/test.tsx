@@ -76,21 +76,31 @@ describe('wh-api', () => {
     expect(error).toBeInstanceOf(Error);
   });
 
-  it('should fetch when search query is valid', async () => {
-    const result = await loadDataFromWH(DEFALUT_WHQUERY).catch(err => false);
-    expect(result).toBeTruthy();
-  });
-
-  it('should fetch specific wp info when id is valid', () => {
-    const ID = 'XXX';
-    const result = accessWHWallpaper(ID).catch(err => false);
-    expect(result).toBeTruthy();
-  });
-
   it('should throw error for specific wp info when id is INvalid', async () => {
     const error = await accessWHWallpaper(undefined as unknown as string).catch(
       err => err,
     );
     expect(error).toBeInstanceOf(Error);
+  });
+
+  it('should fetch when search query is valid', async () => {
+    // global.fetch = jest.fn(
+    //   () =>
+    //     Promise.resolve({
+    //       json: () => Promise.resolve({ rates: { CAD: 1.42 } }),
+    //     }) as Promise<Response>,
+    // );
+    global.fetch = (await import('node-fetch'))
+      .default as unknown as typeof fetch;
+    const result = await loadDataFromWH(DEFALUT_WHQUERY).catch(err => false);
+    expect(result).toBeTruthy();
+  });
+
+  it('should fetch specific wp info when id is valid', async () => {
+    global.fetch = (await import('node-fetch'))
+      .default as unknown as typeof fetch;
+    const ID = 'gjjlzd';
+    const result = await accessWHWallpaper(ID).catch(err => false);
+    expect(result).toBeTruthy();
   });
 });

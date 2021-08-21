@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useHistory } from 'react-router';
 
 import { WHSearchDataItemWithLifecycle } from '../../../defs';
+import { ErrorPlug } from '../../error-plug/error-plug';
+import { Skeleton } from '../../skeleton/skeleton';
 
 import styles from '../content-box.scss';
 
@@ -14,11 +16,7 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
 
   switch (props.data.loadSuccess) {
     case undefined:
-      return <div data-testid="content-img"></div>;
-    // <Skeleton.Button
-    //   active={true}
-    //   className={styles['content-item__skeleton']}
-    // />
+      return <Skeleton />;
     case true:
       return (
         <div
@@ -39,12 +37,18 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
       );
     case false:
     default:
-      return <div data-testid="content-img"></div>;
-    // <Result
-    //   status="error"
-    //   subTitle="load failed"
-    //   className={styles['content-item__text']}
-    // />
+      return (
+        <div
+          data-testid="content-img"
+          className={styles['content-item__wrapper']}
+        >
+          <ErrorPlug
+            size="30%"
+            text="Failed to load the image"
+            color="rgba(190, 0, 0, 0.5)"
+          />
+        </div>
+      );
   }
 };
 

@@ -8,19 +8,22 @@ export interface SelectOption {
 export interface SelectProps {
   value?: string;
   options: SelectOption[];
-  'aria-label': string;
+  ariaLabel: string;
   onChange?: (newValue: string) => unknown;
 }
+
+export const SELECT_DEFAULT_VAL = 'SELECT_DEFAULT_VAL';
 
 export const Select: React.FC<SelectProps> = React.memo(
   (props: SelectProps) => {
     return (
       <select
         className="form-select"
-        aria-label={props['aria-label']}
+        aria-label={props.ariaLabel}
         onChange={e => props.onChange?.(e.target.value)}
-        value={props.value}
+        value={props.value || SELECT_DEFAULT_VAL}
         data-id={Date.now()}
+        role="listbox"
       >
         {props.options.map(o => {
           return (
@@ -30,7 +33,7 @@ export const Select: React.FC<SelectProps> = React.memo(
           );
         })}
         {props.value === undefined ? (
-          <option selected>Select</option>
+          <option value={SELECT_DEFAULT_VAL}>Select</option>
         ) : undefined}
       </select>
     );

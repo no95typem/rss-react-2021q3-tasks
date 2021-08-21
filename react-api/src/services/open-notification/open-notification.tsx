@@ -1,18 +1,20 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
 
 import { genUniqId } from '../../lib/generators/generators';
-import { BootstrapModal } from '../../lib/react/components/bootstrap-modal';
+import { BootstrapModal } from '../../lib/react/components/modals/bootstrap-modal';
 
 export const openNSFWNotification = () => {
   const div = document.createElement('div');
-  document.body.append(div);
+  // document.body.append(div);
   const onClose = () => {
     ReactDOM.render(<></>, div);
     div.remove();
   };
-  const elem = ReactDOM.createPortal(
+  const elem = (
     <BootstrapModal
+      classNameStr="animate__animated animate__fadeIn"
       id={genUniqId()}
       ariaLabel="Settings change error"
       title="Settings change error"
@@ -29,8 +31,7 @@ export const openNSFWNotification = () => {
         a.referrerPolicy = 'noreferrer';
         a.click();
       }}
-    />,
-    document.body,
+    />
   );
   ReactDOM.render(elem, div);
 };

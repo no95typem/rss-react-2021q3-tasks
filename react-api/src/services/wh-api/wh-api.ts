@@ -1,4 +1,3 @@
-import { rejects } from 'assert/strict';
 import { CORS_PROXY, WHPaginationData, WHQuery } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
 import { WHCategoriesList } from '../../wallheaven-types/categories';
@@ -69,13 +68,23 @@ export const modQuery = (
   return newQuery;
 };
 
+const init: RequestInit | undefined =
+  process.env.NODE_ENV === 'test'
+    ? {
+        referrerPolicy: 'no-referrer',
+        headers: {
+          Origin: 'http://localhost:8080',
+        },
+      }
+    : undefined;
+
 export const loadDataFromWH = (
   query: WHQuery,
 ): Promise<[Record<string, WHSearchDataItem>, WHPaginationData]> => {
   return new Promise<[Record<string, WHSearchDataItem>, WHPaginationData]>(
     (res, rej) => {
       const fetchStr = calcWHQueryStr(query);
-      fetch(fetchStr)
+      fetch(fetchStr, init)
         .then(response => {
           if (response.ok) return response.json();
           throw new Error('x');
@@ -110,6 +119,7 @@ export const accessWHWallpaper = (
       `${CORS_PROXY}${WH_API_GET_IMG_BASE_STR}${id}${
         apiKey ? `?${apiKey}` : ''
       }`,
+      init,
     )
       .then(response => {
         if (response.ok) return response.json();
@@ -118,6 +128,6 @@ export const accessWHWallpaper = (
       .then(json => {
         res(json.data as WHWallpaperData);
       })
-      .catch(() => rej());
+      .catch(err => rej());
   });
 };

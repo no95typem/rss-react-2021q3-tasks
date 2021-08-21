@@ -47,6 +47,7 @@ const genFakeData = (
 };
 
 const loadFakeData = async (query: WHQuery) => {
+  if (query.q === 'ERROR') throw new Error();
   const data = genFakeData(30, query);
   return data;
 };
@@ -54,6 +55,7 @@ const loadFakeData = async (query: WHQuery) => {
 const loadDataFunc: (
   query: WHQuery,
 ) => Promise<[Record<string, WHSearchDataItem>, WHPaginationData]> =
+  // loadFakeData;
   process.env.NODE_ENV === 'test' ? loadFakeData : loadDataFromWH;
 
 const setTestLoadResultFunc: (result: boolean) => boolean =

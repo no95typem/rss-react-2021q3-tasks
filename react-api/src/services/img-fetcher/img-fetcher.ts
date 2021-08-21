@@ -22,8 +22,10 @@ export class ImgFetcher {
         img.onload = () => res(true);
         img.onerror = () => res(false);
 
+        // setTimeout(() => {
         img.referrerPolicy = 'no-referrer'; // !
         img.src = src;
+        // }, 10000);
       });
     };
     return this.IMG_LOAD_QUEUE_MANAGER.do(action);

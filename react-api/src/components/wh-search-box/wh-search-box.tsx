@@ -12,7 +12,7 @@ import styles from './wh-search-box.scss';
 import { TagSelect } from '../tag-select/tag-select';
 import { Select } from '../select/select';
 import { Pagination } from '../pagination/pagination';
-import { BootstrapModal } from '../../lib/react/components/bootstrap-modal';
+import { BootstrapModal } from '../../lib/react/components/modals/bootstrap-modal';
 import { genUniqId } from '../../lib/generators/generators';
 import { DEFAULT_WH_PER_PAGE_VALUE } from '../../wallheaven-types/pagination';
 
@@ -64,18 +64,24 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
               onChange={val => props.onChange(val, 'purity')}
             />
           </div>
-          <label className={styles.root__parameter}>
+          <label
+            className={styles.root__parameter}
+            style={{ fontSize: 'var(--bs-body-font-size)' }}
+          >
             {'Sort by:'}
             <Select
               value={props.query.sorting}
-              aria-label="Sorting select"
+              ariaLabel="Sorting select"
               onChange={v => props.onChange(v, 'sorting')}
               options={Object.keys(WHSortings).map(v => {
                 return { value: v, text: v };
               })}
             />
           </label>
-          <label className={styles.root__parameter}>
+          <label
+            className={styles.root__parameter}
+            style={{ fontSize: 'var(--bs-body-font-size)' }}
+          >
             {'API key (is required to set items per page):'}
             <input
               className="form-control"
@@ -100,6 +106,7 @@ export const WHSearchBox: React.FC<WHSearchBoxProps> = (
         {perPageError ? (
           <BootstrapModal
             id={genUniqId()}
+            classNameStr="animate__animated animate__fadeIn"
             ariaLabel="Settings change error"
             title="Settings change error"
             body="Wallhaven API doesn't allow to change items per page!

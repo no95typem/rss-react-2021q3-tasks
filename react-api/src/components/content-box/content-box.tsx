@@ -81,7 +81,7 @@ export const ContentBox: React.FC<ContentBoxProps> = (
         <div>
           <i className="bi-search"></i>
         </div>
-        <div>Search anything!</div>
+        <div>Try to search anything!</div>
       </div>
     );
 

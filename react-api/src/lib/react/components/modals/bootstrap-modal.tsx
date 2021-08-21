@@ -9,6 +9,7 @@ export interface BootstrapModalProps {
   body: string;
   btnText: string;
   onOk: () => unknown;
+  classNameStr?: string;
 }
 
 export const BootstrapModal: React.FC<BootstrapModalProps> = (
@@ -24,7 +25,7 @@ export const BootstrapModal: React.FC<BootstrapModalProps> = (
 
   return ReactDOM.createPortal(
     <div
-      className="modal fade show"
+      className={`modal fade show ${props.classNameStr || ''}`}
       id={props.id}
       tabIndex={-1}
       aria-labelledby={props.ariaLabel}
@@ -70,10 +71,7 @@ export const BootstrapModal: React.FC<BootstrapModalProps> = (
         </div>
       </div>
     </div>,
+
     anchor,
   );
-};
-
-export const showBootstrapModal = (elem: JSX.Element) => {
-  ReactDOM.createPortal(elem, document.body);
 };
