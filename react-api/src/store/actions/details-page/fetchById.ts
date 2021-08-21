@@ -76,15 +76,11 @@ const fetchFunc =
 export const fetchById = (id: string) => {
   return (dispatch: Dispatch, getState: () => State): void => {
     const { apiKey, imgFetcher } = getState().coreState;
-    // fakeAccessWHWallpaper()
-    console.log('start at', Date.now());
     fetchFunc(id, apiKey)
       .then(data => {
         dispatch(setData(data));
-        console.log(data.path);
         imgFetcher.loadImg(data.path).then(result => {
           // setTimeout(() => {
-          console.log('XXX', result);
           dispatch(setFlag('imgPreloaded', result));
           // }, 2000);
         });
@@ -92,9 +88,6 @@ export const fetchById = (id: string) => {
       })
       .catch(() => {
         dispatch(setFlag('dataLoaded', false));
-      })
-      .finally(() => {
-        console.log('end at', Date.now());
       });
   };
 };

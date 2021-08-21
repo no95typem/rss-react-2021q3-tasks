@@ -29,7 +29,11 @@ const createPaginatorItem = (
   const onChange = disabled ? undefined : changeHandler;
   return (
     <li className={classList} onClick={onChange} key={key}>
-      <a className="page-link" href="#">
+      <a
+        className="page-link"
+        href="#"
+        role={typeof val === 'number' ? 'radio' : 'button'}
+      >
         {val}
       </a>
     </li>

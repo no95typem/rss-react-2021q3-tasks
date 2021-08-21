@@ -44,6 +44,7 @@ export const BootstrapModal: React.FC<BootstrapModalProps> = (
               data-bs-dismiss="modal"
               aria-label="Close"
               onClick={() => props.onClose()}
+              role="button"
             ></button>
           </div>
           <div className="modal-body">{props.body}</div>
@@ -53,6 +54,7 @@ export const BootstrapModal: React.FC<BootstrapModalProps> = (
               className="btn btn-secondary"
               data-bs-dismiss="modal"
               onClick={() => props.onClose()}
+              role="button"
             >
               Close
             </button>
@@ -60,6 +62,7 @@ export const BootstrapModal: React.FC<BootstrapModalProps> = (
               type="button"
               className="btn btn-primary"
               onClick={() => props.onOk()}
+              role="button"
             >
               {props.btnText}
             </button>
