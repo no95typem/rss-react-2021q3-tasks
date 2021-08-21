@@ -33,6 +33,7 @@ export const TagSelect: React.FC<TagSelectProps> = (props: TagSelectProps) => {
                     )
                   : props.onChange?.([...props.value, option.value])
               }
+              role="checkbox"
             ></input>
             <label className="btn btn-outline-primary" htmlFor={id}>
               {option.text}

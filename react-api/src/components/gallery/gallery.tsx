@@ -70,3 +70,5 @@ export const GalleryReduxed = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Gallery);
+
+export default GalleryReduxed;

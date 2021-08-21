@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux';
-import { CORS_PROXY } from '../../../defs';
 import { accessWHWallpaper } from '../../../services/wh-api/wh-api';
 import { WHWallpaperData } from '../../../wallheaven-types/wh-wallpaper-data';
 import { State } from '../../state';
@@ -69,20 +68,33 @@ const fakeAccessWHWallpaper = (): Promise<WHWallpaperData> => {
 
 /* /DEBUG */
 
+const fetchFunc =
+  process.env.NODE_ENV === 'test'
+    ? (id: string, apiKey?: string) => fakeAccessWHWallpaper()
+    : accessWHWallpaper;
+
 export const fetchById = (id: string) => {
   return (dispatch: Dispatch, getState: () => State): void => {
     const { apiKey, imgFetcher } = getState().coreState;
     // fakeAccessWHWallpaper()
-    accessWHWallpaper(id, apiKey)
+    console.log('start at', Date.now());
+    fetchFunc(id, apiKey)
       .then(data => {
         dispatch(setData(data));
+        console.log(data.path);
         imgFetcher.loadImg(data.path).then(result => {
           // setTimeout(() => {
+          console.log('XXX', result);
           dispatch(setFlag('imgPreloaded', result));
           // }, 2000);
         });
         dispatch(setFlag('dataLoaded', true));
       })
-      .catch(() => dispatch(setFlag('dataLoaded', false)));
+      .catch(() => {
+        dispatch(setFlag('dataLoaded', false));
+      })
+      .finally(() => {
+        console.log('end at', Date.now());
+      });
   };
 };

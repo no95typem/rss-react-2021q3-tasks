@@ -16,6 +16,7 @@ export class ImgFetcher {
 
   loadImg = (src: string): Promise<boolean> => {
     const action = async () => {
+      if (!src) return false;
       return new Promise<boolean>(res => {
         const img = new Image();
         img.onload = () => res(true);

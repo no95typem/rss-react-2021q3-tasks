@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 import store from './store/store';
 
@@ -12,7 +13,9 @@ const rootEl = document.getElementById('root');
 
 export const INDEX = (
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>
 );
 

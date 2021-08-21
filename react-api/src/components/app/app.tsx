@@ -11,9 +11,11 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { About } from '../about/about';
 import { NotFoundPage } from '../404/404';
 import { DetailsPageReduxed } from '../details/details';
-import { GalleryReduxed } from '../gallery/gallery';
 
 import styles from './app.scss';
+import { SpinnerBorder } from '../spinner-border/spinner-border';
+
+const GalleryReduxed = React.lazy(() => import('../gallery/gallery'));
 
 const CSS_TRANSITION_CLASSNAMES = {
   enter: styles.route_enter,
@@ -56,7 +58,13 @@ const Routes: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <div className={styles.app}>
-      <BrowserRouter>
+      <React.Suspense
+        fallback={
+          <div>
+            <SpinnerBorder />
+          </div>
+        }
+      >
         <header className="container-fluid">
           <nav>
             <ul className="nav nav-pills">
@@ -74,7 +82,7 @@ export const App: React.FC = () => {
           </nav>
         </header>
         <Routes />
-      </BrowserRouter>
+      </React.Suspense>
     </div>
   );
 };

@@ -32,6 +32,7 @@ export const BootstrapModal: React.FC<BootstrapModalProps> = (
       // onClick={() => props.onClose()}
       onClick={() => props.onClose()}
       // aria-hidden="true"
+      role="dialog"
     >
       <div className="modal-dialog" onClick={e => e.stopPropagation()}>
         <div className="modal-content">

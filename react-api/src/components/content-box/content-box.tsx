@@ -74,8 +74,8 @@ export const ContentBox: React.FC<ContentBoxProps> = (
   else
     content = (
       <div
-        className="alert alert-primary d-flex align-items-center"
-        role="alert"
+        className="info info-primary d-flex align-items-center"
+        role="contentinfo"
         style={{ gap: '10px' }}
       >
         <div>
@@ -86,7 +86,7 @@ export const ContentBox: React.FC<ContentBoxProps> = (
     );
 
   return (
-    <div className={styles.root} ref={root}>
+    <div className={styles.root} ref={root} role="grid">
       {props.error || cards.length === 0 ? (
         content
       ) : (

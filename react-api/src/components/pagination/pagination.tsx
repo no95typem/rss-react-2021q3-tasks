@@ -39,13 +39,13 @@ const createPaginatorItem = (
 export const Pagination: React.FC<PaginationProps> = (
   props: PaginationProps,
 ) => {
-  if (!props.current) return <></>;
-
   const [specPos, setSpecPos] = React.useState<number | undefined>(undefined);
 
   React.useEffect(() => {
     setSpecPos(undefined);
   }, [props.current]);
+
+  if (!props.current) return <></>;
 
   const pages = Math.ceil((props.total ?? 999999) / (props.perPage ?? 1));
 

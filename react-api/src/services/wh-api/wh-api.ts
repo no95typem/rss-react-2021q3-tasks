@@ -1,3 +1,4 @@
+import { rejects } from 'assert/strict';
 import { CORS_PROXY, WHPaginationData, WHQuery } from '../../defs';
 import { OBJ_PROCESSOR } from '../../lib/processors/obj-processor';
 import { WHCategoriesList } from '../../wallheaven-types/categories';
@@ -30,7 +31,7 @@ const calcPurityQuery = (query: WHQuery): string => {
   return `${sfw}${sketchy}${nsfw}`;
 };
 
-const calcWHQueryStr = (query: WHQuery): string => {
+export const calcWHQueryStr = (query: WHQuery): string => {
   const { q } = query;
   const categories = calcCategoryQuery(query);
   const purity = calcPurityQuery(query);
@@ -104,7 +105,7 @@ export const accessWHWallpaper = (
   id: string,
   apiKey?: string,
 ): Promise<WHWallpaperData> => {
-  return new Promise(res => {
+  return new Promise<WHWallpaperData>((res, rej) => {
     fetch(
       `${CORS_PROXY}${WH_API_GET_IMG_BASE_STR}${id}${
         apiKey ? `?${apiKey}` : ''
@@ -116,6 +117,7 @@ export const accessWHWallpaper = (
       })
       .then(json => {
         res(json.data as WHWallpaperData);
-      });
+      })
+      .catch(() => rej());
   });
 };

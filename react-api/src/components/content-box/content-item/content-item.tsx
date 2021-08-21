@@ -14,14 +14,17 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
 
   switch (props.data.loadSuccess) {
     case undefined:
-      return <div></div>;
+      return <div data-testid="content-img"></div>;
     // <Skeleton.Button
     //   active={true}
     //   className={styles['content-item__skeleton']}
     // />
     case true:
       return (
-        <div className={styles['content-item__wrapper']}>
+        <div
+          className={styles['content-item__wrapper']}
+          data-testid="content-img"
+        >
           <img
             className={styles['content-item_Image']}
             src={props.data.thumbs.small}
@@ -30,12 +33,13 @@ const ContentItem: React.FC<ContentItemProps> = (props: ContentItemProps) => {
             onClick={() => {
               history.push(`/details/${props.data.id}`);
             }}
+            role="img"
           />
         </div>
       );
     case false:
     default:
-      return <div></div>;
+      return <div data-testid="content-img"></div>;
     // <Result
     //   status="error"
     //   subTitle="load failed"

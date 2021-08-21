@@ -32,6 +32,7 @@ export const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         onKeyDown={e => {
           if (e.key === 'Enter') props.onSubmit?.();
         }}
+        role="search"
       ></input>
       {/* {props.busy ? <Spin size="small"></Spin> : undefined} */}
     </div>

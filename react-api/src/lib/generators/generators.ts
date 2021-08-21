@@ -1,6 +1,13 @@
+const randomFunc = (): string =>
+  window.crypto?.getRandomValues
+    ? window.crypto.getRandomValues(new Uint8Array(4)).join('')
+    : Array(8)
+        .fill(null)
+        .map(() => (Math.random() * 10).toFixed(0))
+        .join('');
+
 export function genUniqId(): string {
-  const arr = new Uint8Array(4);
-  return window.crypto.getRandomValues(arr).join('');
+  return randomFunc();
 }
 
 export function getRandomInt(max: number): number {

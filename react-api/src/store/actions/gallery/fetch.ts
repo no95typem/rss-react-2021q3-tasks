@@ -46,27 +46,38 @@ const genFakeData = (
   return [fakeMemory, fakePagination];
 };
 
+const loadFakeData = async (query: WHQuery) => {
+  const data = genFakeData(30, query);
+  return data;
+};
+
+const loadDataFunc: (
+  query: WHQuery,
+) => Promise<[Record<string, WHSearchDataItem>, WHPaginationData]> =
+  process.env.NODE_ENV === 'test' ? loadFakeData : loadDataFromWH;
+
+const setTestLoadResultFunc: (result: boolean) => boolean =
+  process.env.NODE_ENV === 'test'
+    ? (result: boolean) => true
+    : (result: boolean) => result;
+
 const loadData = async (
   query: WHQuery,
   loadImg: (str: string) => Promise<boolean>,
 ): Promise<WHResponseProcessed> => {
-  const [data, pagination] = await loadDataFromWH(query);
-  // throw new Error();
-  // const [data, pagination] = genFakeData(30, query);
-  return new Promise(gRes => {
-    const loads = Object.entries(data).map(entry => {
-      return new Promise<[string, boolean]>(res => {
-        if (!entry[1].thumbs.small) res([entry[1].id, false]);
-        else {
-          loadImg(entry[1].thumbs.small).then(result => {
-            res([entry[1].id, result]);
-          });
-        }
-      });
+  const [data, pagination] = await loadDataFunc(query);
+  const loads = Object.entries(data).map(entry => {
+    return new Promise<[string, boolean]>(res => {
+      if (!entry[1].thumbs.small)
+        res([entry[1].id, setTestLoadResultFunc(false)]);
+      else {
+        loadImg(entry[1].thumbs.small).then(result => {
+          res([entry[1].id, setTestLoadResultFunc(result)]);
+        });
+      }
     });
-
-    setTimeout(() => gRes({ data, loads, pagination }), 1000);
   });
+  return { data, loads, pagination };
 };
 
 export const FetchSearch = (more: boolean, specQuery?: WHQuery) => {
