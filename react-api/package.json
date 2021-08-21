@@ -1,5 +1,5 @@
 {
-  "name": "react-redux",
+  "name": "react-testing",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -86,7 +86,9 @@
   "scripts": {
     "dev": "webpack serve --hot",
     "build": "cross-env NODE_ENV=production webpack",
-    "test": "jest"
+    "proxy": "node ./src/cors-anywhere.js",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "jest": {
     "moduleNameMapper": {
