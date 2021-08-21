@@ -10,9 +10,10 @@ import { App } from './components/app/app';
 
 const rootEl = document.getElementById('root');
 
-render(
+export const INDEX = (
   <Provider store={store}>
     <App />
-  </Provider>,
-  rootEl,
+  </Provider>
 );
+
+render(INDEX, rootEl);

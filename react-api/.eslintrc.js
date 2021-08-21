@@ -5,6 +5,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
+    'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
     'prettier',
   ],
@@ -17,7 +18,7 @@ module.exports = {
     },
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint', 'prettier', 'jest'],
   ignorePatterns: ['webpack*.config.js', '*.d.ts', 'configs*'],
   settings: {
     'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],

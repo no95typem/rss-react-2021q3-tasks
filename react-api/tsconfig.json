@@ -16,7 +16,7 @@
   },
   "include": [
     "src"
-  ],
+, "__mocks__"  ],
   "exclude": [
     "configs",
     "dist",
