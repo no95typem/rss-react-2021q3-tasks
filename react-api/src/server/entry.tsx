@@ -31,6 +31,8 @@ const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 
+const PORT = process.env.PORT || 9000;
+
 // create express application
 const app = Express();
 
@@ -146,6 +148,6 @@ app.use('*', (req, res) => {
   return res.send(indexHTML);
 });
 // запускаем сервер на порту 9000
-app.listen('9000', () => {
-  console.log('Express server started at <http://localhost:9000>');
+app.listen(PORT, () => {
+  console.log(`Express server started at port ${PORT}`);
 });
