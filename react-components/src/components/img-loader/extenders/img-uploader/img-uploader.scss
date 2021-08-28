@@ -1,0 +1,30 @@
+.root {
+  border: none;
+  position: relative;
+  aspect-ratio: 1;
+  &__input {
+    display: none;
+  }
+  &__btn {
+    max-width: none;
+    width: 100%;
+  }
+  &__btn-layer {
+    opacity: 0.3;
+    width: 90%;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.5s;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    &:hover {
+      opacity: 1;
+    }
+  }
+  &__collapsable {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+  }
+}
