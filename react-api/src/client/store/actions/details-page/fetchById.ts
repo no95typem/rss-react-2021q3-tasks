@@ -21,9 +21,7 @@ export const fetchById = (id: string) => {
       .then(json => {
         const data = json.data as WHWallpaperData;
         dispatch(setData(data));
-        console.log(data);
         imgFetcher.loadImg(data.path).then(result => {
-          console.log(result);
           // setTimeout(() => {
           dispatch(setFlag('imgPreloaded', result));
           // }, 2000);
@@ -31,7 +29,6 @@ export const fetchById = (id: string) => {
         dispatch(setFlag('dataLoaded', true));
       })
       .catch(err => {
-        console.log(err);
         dispatch(setFlag('dataLoaded', false));
       });
   };

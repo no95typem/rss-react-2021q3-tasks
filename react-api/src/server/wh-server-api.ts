@@ -14,7 +14,7 @@ const WH_API_BASE_STR = 'https://wallhaven.cc/api/v1/';
 
 /* --- GET ONE WALLPAPER --- */
 
-export const getWHWallpaer = (
+export const getWHWallpaper = (
   req: WHWpInfoProxyReq,
 ): Promise<WHWallpaperData> => {
   return new Promise((res, rej) => {

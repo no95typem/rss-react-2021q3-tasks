@@ -24,7 +24,6 @@ export class ImgFetcher {
 
         // setTimeout(() => {
         img.referrerPolicy = 'no-referrer'; // !
-        console.log(src);
         img.src = src;
         // }, 10000);
       });

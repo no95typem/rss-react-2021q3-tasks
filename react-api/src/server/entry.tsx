@@ -17,7 +17,7 @@ import { App } from '../client/components/app/app';
 import {
   getWHWallpaperFake,
   getWHSearch,
-  getWHWallpaer,
+  getWHWallpaper,
   getWHSearchFake,
 } from './wh-server-api';
 import {
@@ -47,13 +47,13 @@ app.get(
   Express.static(path.resolve(__dirname, '../client')),
 );
 
-const fetchOneWallpaper = IS_ONLINE ? getWHWallpaer : getWHWallpaperFake;
+const fetchOneWallpaper = IS_ONLINE ? getWHWallpaper : getWHWallpaperFake;
 
 const proxyOneWHWalpaper = (res: Express.Response, req: WHWpInfoProxyReq) => {
   fetchOneWallpaper(req)
     .then(data => {
       res.status(200);
-      return res.send(data);
+      return res.send({ data });
     })
     .catch(err => {
       console.error(
@@ -69,7 +69,6 @@ const getWHSearchFunc = IS_ONLINE ? getWHSearch : getWHSearchFake;
 const proxyWHSearch = (res: Express.Response, req: WHSearchProxyReq) => {
   getWHSearchFunc(req)
     .then(data => {
-      console.log(data);
       res.status(200);
       return res.send(data);
     })
@@ -85,7 +84,6 @@ const proxyWHSearch = (res: Express.Response, req: WHSearchProxyReq) => {
 app.post('/proxy', jsonParser, (req, res, next) => {
   try {
     const payload = req.body as ProxyReq;
-    console.log(req);
     switch (payload.code) {
       case ProxyReqCodes.WHWpInfo:
         proxyOneWHWalpaper(res, payload as WHWpInfoProxyReq);
