@@ -113,6 +113,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: './src/server/public', to: '../client/public' },
+        { from: './src/server/package.json', to: '../package.json' },
       ],
     }),
     isDevelopment &&
