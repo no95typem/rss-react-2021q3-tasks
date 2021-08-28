@@ -106,7 +106,6 @@ module.exports = {
     new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
     // !isDevelopment && new CleanWebpackPlugin({ cleanStaleWebpackAssets: false, protectWebpackAssets: false }),
     new webpack.DefinePlugin({
-      'process.env': '{}',
       IS_DEV: isDevelopment,
       IS_ONLINE: true,
     }),
