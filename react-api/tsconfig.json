@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es5",
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "rootDir": "./",
+    "outDir": "./dist",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "downlevelIteration": true
+  },
+  "include": [
+    "src"
+, "__mocks__"  ],
+  "exclude": [
+    "configs",
+    "dist",
+    "node_modules"
+  ]
+}

@@ -1,0 +1,33 @@
+.root {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  height: 100%;
+  &__article {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    & > * {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    ul {
+      list-style: disc;
+    }
+    a {
+      color: darkorange;
+      &:hover {
+        text-decoration: underline;
+      }
+      &:visited {
+        color: rgb(179, 98, 0);
+      }
+    }
+  }
+}

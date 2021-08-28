@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+
+html,
+body {
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+}
+
+ul {
+  list-style: none;
+  margin: 0px;
+}
+
+a {
+  text-decoration: none;
+}
+
+input {
+  border: 0px;
+  &:focus {
+    outline: none;
+  }
+  &[type='number'] {
+    -moz-appearance: textfield;
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+button {
+  cursor: pointer;
+}
+
+fieldset {
+  outline: none;
+  border: none;
+}
+
+.app {
+  --border-color: rgb(216, 191, 216);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  // display: grid;
+  // grid-template-columns: auto 1fr;
+  // gap: 10px;
+  padding: 20px;
+  background: linear-gradient(to bottom, rgb(82, 48, 85), rgb(53, 18, 35));
+  box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.5),
+    inset -10px -10px 20px rgba(0, 0, 0, 0.5);
+  background-position: 50% 50%;
+  background-size: cover;
+}
+
+.route {
+  color: blueviolet;
+  &_enter {
+    opacity: 0;
+  }
+  &_enter-active {
+    opacity: 1;
+    transition: opacity 200ms ease-in;
+  }
+  &_exit {
+    opacity: 1;
+  }
+  &_exit-active {
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+  }
+}
