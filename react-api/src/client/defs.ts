@@ -49,4 +49,4 @@ export const DEFALUT_WHQUERY = OBJ_PROCESSOR.deepFreeze(
   ),
 );
 
-export const API_URL = 'http://localhost:9000/proxy';
+export const API_URL = '/proxy';
