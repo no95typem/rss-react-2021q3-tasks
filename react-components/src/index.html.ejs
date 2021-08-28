@@ -4,9 +4,15 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>React Components</title>
+        <% if (webpackConfig.mode == 'production') { %>
+        <link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/@blueprintjs/core@^3.47.0/lib/css/blueprint.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/@blueprintjs/datetime@3.23.7/lib/css/blueprint-datetime.css" rel="stylesheet" type="text/css" />
+        <% } else { %>
         <link href="../node_modules/normalize.css/normalize.css" rel="stylesheet" type="text/html" />
         <link href="../node_modules/@blueprintjs/core/lib/css/blueprint.css" rel="stylesheet" />
         <link href="../node_modules/@blueprintjs/datetime/lib/css/blueprint-datetime.css" rel="stylesheet" />
+        <% } %>
     </head>
     <body>
         <div id="root"></div>
